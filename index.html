@@ -753,107 +753,124 @@ function refreshWater(key, val) {
 
 // ─── SUPABASE SAVE / LOAD ──────────────────────────────────
 async function upsert(table, data) {
-  const { error } = await supabaseClient.from(table).upsert(data, { onConflict: 'user_id' });
-  return error;
+  try {
+    const { error } = await supabaseClient.from(table).upsert(data, { onConflict: 'user_id' });
+    if (error) console.error('Supabase upsert error:', error);
+    return error;
+  } catch(e) {
+    console.error('Supabase exception:', e);
+    return e;
+  }
 }
 
 async function loadAllData() {
   if (!currentUser) return;
   const uid = currentUser.id;
 
-  // Load checklist
-  const { data: cl } = await supabaseClient.from('checklists').select('data').eq('user_id', uid).single();
-  if (cl?.data) { checklistData = cl.data; buildChecklist(); }
+  try {
+    // Load checklist
+    const { data: cl, error: clErr } = await supabaseClient.from('checklists').select('data').eq('user_id', uid).maybeSingle();
+    if (cl?.data) { checklistData = cl.data; buildChecklist(); }
 
-  // Load recovery
-  const { data: rec } = await supabaseClient.from('recovery').select('data').eq('user_id', uid).single();
-  if (rec?.data) { recoveryData = rec.data; buildRecovery(); }
+    // Load recovery
+    const { data: rec } = await supabaseClient.from('recovery').select('data').eq('user_id', uid).maybeSingle();
+    if (rec?.data) { recoveryData = rec.data; buildRecovery(); }
 
-  // Load workout inputs
-  const { data: wo } = await supabaseClient.from('workout_logs').select('data').eq('user_id', uid).single();
-  if (wo?.data) {
-    workoutData = wo.data;
-    // Populate inputs
-    document.querySelectorAll('[data-key]').forEach(el => {
-      if (workoutData[el.dataset.key]) el.value = workoutData[el.dataset.key];
-    });
-  }
-
-  // Load coach notes (coach only)
-  if (isCoach) {
-    const { data: notes } = await supabaseClient.from('coach_notes').select('*').single();
-    if (notes) {
-      if (notes.weekly) document.getElementById('coach-notes-weekly').value = notes.weekly;
-      if (notes.progress) document.getElementById('coach-notes-progress').value = notes.progress;
-      if (notes.adjustments) document.getElementById('coach-notes-adjustments').value = notes.adjustments;
-    }
-  }
-
-  // If coach, also load Samah's data for viewing
-  if (isCoach) {
-    const { data: clientData } = await supabaseClient.from('workout_logs').select('data, user_id').neq('user_id', uid);
-    if (clientData?.length) {
-      clientData.forEach(row => {
-        Object.entries(row.data).forEach(([key, val]) => {
-          const el = document.querySelector(`[data-key="${key}"]`);
-          if (el && !el.classList.contains('coach-only')) el.value = val;
-        });
+    // Load workout inputs
+    const { data: wo } = await supabaseClient.from('workout_logs').select('data').eq('user_id', uid).maybeSingle();
+    if (wo?.data) {
+      workoutData = wo.data;
+      document.querySelectorAll('[data-key]').forEach(el => {
+        if (workoutData[el.dataset.key]) el.value = workoutData[el.dataset.key];
       });
     }
+
+    // Load coach notes (coach only)
+    if (isCoach) {
+      const { data: notes } = await supabaseClient.from('coach_notes').select('*').maybeSingle();
+      if (notes) {
+        if (notes.weekly) document.getElementById('coach-notes-weekly').value = notes.weekly;
+        if (notes.progress) document.getElementById('coach-notes-progress').value = notes.progress;
+        if (notes.adjustments) document.getElementById('coach-notes-adjustments').value = notes.adjustments;
+      }
+      // Load client workout data
+      const { data: clientData } = await supabaseClient.from('workout_logs').select('data, user_id').neq('user_id', uid);
+      if (clientData?.length) {
+        clientData.forEach(row => {
+          if (row.data) Object.entries(row.data).forEach(([key, val]) => {
+            const el = document.querySelector(`[data-key="${key}"]`);
+            if (el && !el.classList.contains('coach-only')) el.value = val;
+          });
+        });
+      }
+    }
+  } catch(e) {
+    console.error('loadAllData error:', e);
   }
 }
 
 async function saveChecklist() {
   const btn = event.target;
   btn.disabled = true;
+  btn.textContent = 'Saving...';
   const err = await upsert('checklists', { user_id: currentUser.id, data: checklistData });
-  showStatus('checklist-status', err);
+  btn.textContent = 'Save Progress';
   btn.disabled = false;
+  showStatus('checklist-status', err);
 }
 
 async function saveRecovery() {
   const btn = event.target;
   btn.disabled = true;
+  btn.textContent = 'Saving...';
   const err = await upsert('recovery', { user_id: currentUser.id, data: recoveryData });
-  showStatus('recovery-status', err);
+  btn.textContent = 'Save Log';
   btn.disabled = false;
+  showStatus('recovery-status', err);
 }
 
 async function saveWorkout(section) {
   const btn = event.target;
   btn.disabled = true;
+  btn.textContent = 'Saving...';
   const err = await upsert('workout_logs', { user_id: currentUser.id, data: workoutData });
-  showStatus(section + '-status', err);
+  btn.textContent = section === 'week1' ? 'Save Week 1' : 'Save Workout Log';
   btn.disabled = false;
+  showStatus(section + '-status', err);
 }
 
 async function saveWeek(week) {
   const btn = event.target;
   btn.disabled = true;
+  btn.textContent = 'Saving...';
   const err = await upsert('workout_logs', { user_id: currentUser.id, data: workoutData });
-  showStatus(week + '-status', err);
+  btn.textContent = 'Save Week 1';
   btn.disabled = false;
+  showStatus(week + '-status', err);
 }
 
 async function saveNotes() {
   const btn = event.target;
   btn.disabled = true;
+  btn.textContent = 'Saving...';
   const data = {
     weekly: document.getElementById('coach-notes-weekly').value,
     progress: document.getElementById('coach-notes-progress').value,
     adjustments: document.getElementById('coach-notes-adjustments').value,
   };
   const { error } = await supabaseClient.from('coach_notes').upsert({ id: 1, ...data });
-  showStatus('notes-status', error);
+  btn.textContent = 'Save Notes';
   btn.disabled = false;
+  showStatus('notes-status', error);
 }
 
 function showStatus(id, error) {
   const el = document.getElementById(id);
   if (!el) return;
   el.className = 'save-status' + (error ? ' error' : '');
-  el.textContent = error ? '✗ Error saving — check connection' : '✓ Saved!';
-  setTimeout(() => el.textContent = '', 3000);
+  el.textContent = error ? '✗ Could not save — please try again' : '✓ Saved!';
+  if (!error) setTimeout(() => el.textContent = '', 4000);
+  // If error, leave it visible so she can see it
 }
 
 // ─── INIT ──────────────────────────────────────────────────
