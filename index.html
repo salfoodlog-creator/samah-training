@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samah N — Training Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --sage: #7A9E7E;
+    --sage-light: #EBF2EC;
+    --sage-dark: #4E7252;
+    --blush: #D4937A;
+    --blush-light: #F8EDE8;
+    --charcoal: #2C2C2C;
+    --mid: #6B6B6B;
+    --light: #ADADAD;
+    --border: #E4DDD3;
+    --row-alt: #F5F1EC;
+    --white: #FFFFFF;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--charcoal); min-height: 100vh; }
+
+  /* AUTH */
+  .auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--charcoal); }
+  .auth-card { background: var(--white); border-radius: 16px; padding: 32px 24px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+  .auth-card h1 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 4px; color: var(--charcoal); }
+  .auth-card p { font-size: 13px; color: var(--mid); margin-bottom: 24px; }
+  .auth-tabs { display: flex; gap: 0; margin-bottom: 20px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .auth-tab { flex: 1; padding: 10px; border: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--mid); transition: all 0.2s; }
+  .auth-tab.active { background: var(--charcoal); color: white; }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mid); margin-bottom: 6px; }
+  .form-group input { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 13px 14px; font-family: 'DM Sans', sans-serif; font-size: 16px; background: var(--cream); color: var(--charcoal); transition: border-color 0.2s; }
+  .form-group input:focus { outline: none; border-color: var(--sage); }
+  .auth-btn { width: 100%; background: var(--sage-dark); color: white; border: none; border-radius: 8px; padding: 15px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+  .auth-btn:hover { background: var(--sage); }
+  .auth-error { font-size: 12px; color: var(--blush); margin-top: 10px; text-align: center; }
+
+  /* HEADER */
+  .header { background: var(--charcoal); padding: 14px 16px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.15); }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
+  .header-top h1 { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--cream); }
+  .header-right { display: flex; align-items: center; gap: 8px; }
+  .role-badge { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; }
+  .role-badge.coach { background: var(--blush); color: white; }
+  .role-badge.client { background: var(--sage); color: white; }
+  .logout-btn { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--light); font-family: 'DM Sans', sans-serif; font-size: 11px; padding: 5px 10px; border-radius: 6px; cursor: pointer; }
+  .logout-btn:hover { border-color: white; color: white; }
+  .tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { background: transparent; border: none; color: var(--light); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 10px 14px; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s; }
+  .tab-btn:hover { color: var(--cream); }
+  .tab-btn.active { color: #c8e6ca; border-bottom: 2px solid var(--sage); }
+  .tab-btn.week-tab { color: #ffd180; }
+  .tab-btn.week-tab.active { color: #ffd180; border-bottom-color: #ffd180; }
+
+  /* AUTOSAVE BAR */
+  .autosave-bar { display: flex; align-items: center; gap: 6px; padding: 8px 0 4px; font-size: 11px; color: var(--mid); min-height: 28px; }
+  .autosave-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); flex-shrink: 0; transition: background 0.3s; }
+  .autosave-dot.saving { background: #f59e0b; animation: pulse 1s infinite; }
+  .autosave-dot.saved { background: var(--sage); }
+  .autosave-dot.error { background: var(--blush); }
+
+  /* TIMER TOGGLE */
+  .timer-toggle-row { display: flex; align-items: center; gap: 10px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .toggle-track { width: 36px; height: 20px; background: var(--border); border-radius: 10px; position: relative; transition: background 0.2s; flex-shrink: 0; }
+  .toggle-track.on { background: var(--sage); }
+  .toggle-knob { width: 16px; height: 16px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+  .toggle-track.on .toggle-knob { left: 18px; }
+  .toggle-label { font-size: 13px; font-weight: 500; flex: 1; }
+  .toggle-sub { font-size: 11px; color: var(--mid); }
+
+  /* REST TIMER */
+  .rest-timer-box { background: var(--sage-light); border: 1px solid var(--sage); border-radius: 8px; padding: 10px 14px; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .timer-display { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--sage-dark); }
+  .timer-display.running { color: var(--sage-dark); }
+  .timer-display.done { color: var(--blush); }
+  .timer-controls { display: flex; gap: 6px; }
+  .timer-btn { border: none; border-radius: 7px; padding: 7px 12px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; }
+  .timer-btn.start { background: var(--sage-dark); color: white; }
+  .timer-btn.reset { background: var(--border); color: var(--charcoal); }
+
+  /* MAIN */
+  .main { padding: 16px 12px 24px; max-width: 1050px; margin: 0 auto; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 4px; }
+  .section-subtitle { font-size: 11px; color: var(--mid); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 18px; }
+  .coach-banner { background: var(--blush-light); border-left: 3px solid var(--blush); border-radius: 8px; padding: 12px 14px; margin-bottom: 18px; font-size: 13px; line-height: 1.6; }
+  .coach-banner strong { color: var(--blush); font-weight: 600; }
+  .coach-banner.green { background: var(--sage-light); border-color: var(--sage); }
+  .coach-banner.green strong { color: var(--sage-dark); }
+
+  /* WORKOUT TABLES */
+  .workout-block { margin-bottom: 28px; }
+  .workout-block-title { font-family: 'Playfair Display', serif; font-size: 15px; font-style: italic; color: var(--sage-dark); margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+  .workout-block-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .workout-block-title.blush-title { color: var(--blush); }
+  .table-wrap { overflow-x: auto; border-radius: 10px; box-shadow: 0 1px 8px rgba(0,0,0,0.06); margin-bottom: 4px; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; background: var(--white); font-size: 12px; min-width: 520px; }
+  thead tr { background: var(--charcoal); }
+  thead th { color: var(--cream); font-weight: 500; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 10px; text-align: left; white-space: nowrap; }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  tbody td { padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; line-height: 1.4; }
+  .ex-id { font-weight: 700; color: var(--sage-dark); font-size: 11px; white-space: nowrap; }
+  .tag { font-size: 9px; border-radius: 4px; padding: 1px 5px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-left: 3px; white-space: nowrap; display: inline-block; }
+  .tag-superset { background: var(--sage-light); color: var(--sage-dark); border: 1px solid var(--sage); }
+  .tag-stability { background: #EEF2FF; color: #4338CA; border: 1px solid #A5B4FC; }
+  .tag-core { background: #FFF7ED; color: #C2410C; border: 1px solid #FDBA74; }
+  .tag-warmup { background: #F0FDF4; color: #166534; border: 1px solid #86EFAC; }
+  .note-cell { font-size: 11px; color: var(--mid); font-style: italic; max-width: 130px; }
+  .cell-input { width: 100%; min-width: 70px; border: 1px solid var(--border); border-radius: 5px; padding: 6px 7px; font-family: 'DM Sans', sans-serif; font-size: 13px; background: var(--cream); color: var(--charcoal); resize: vertical; min-height: 34px; }
+  .cell-input:focus { outline: none; border-color: var(--sage); }
+  .cell-input.coach-only { background: #fff8e1; border-color: #ffd54f; }
+
+  /* LIVE DOT */
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #4caf50; display: inline-block; animation: pulse 2s infinite; margin-right: 4px; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SAVE ROW */
+  .save-row { display: flex; align-items: center; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+  .save-btn { background: var(--sage-dark); color: white; border: none; border-radius: 8px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .save-btn:hover { background: var(--sage); }
+  .save-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .save-status { font-size: 12px; color: var(--sage); font-weight: 500; }
+  .save-status.error { color: var(--blush); }
+
+  /* CHECKLIST */
+  .check-item { background: var(--white); border-radius: 10px; padding: 14px 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); cursor: pointer; }
+  .check-box { width: 22px; height: 22px; min-width: 22px; border: 2px solid var(--border); border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .check-box.checked { background: var(--sage); border-color: var(--sage); }
+  .check-tick { color: white; font-size: 13px; font-weight: 700; opacity: 0; }
+  .check-box.checked .check-tick { opacity: 1; }
+  .check-label { font-weight: 500; font-size: 14px; flex: 1; }
+  .check-desc { font-size: 12px; color: var(--mid); margin-top: 2px; }
+  .check-item.done .check-label { text-decoration: line-through; color: var(--light); }
+
+  /* RECOVERY */
+  .recovery-header { background: var(--charcoal); color: var(--cream); border-radius: 10px; padding: 10px 14px; display: grid; grid-template-columns: 75px 1fr 1fr 1fr 1fr 1fr 1fr; gap: 6px; font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .recovery-grid { display: grid; gap: 6px; }
+  .recovery-row { background: var(--white); border-radius: 8px; padding: 8px 14px; display: grid; grid-template-columns: 75px 1fr 1fr 1fr 1fr 1fr 1fr; gap: 6px; align-items: center; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .recovery-input { width: 100%; border: 1px solid var(--border); border-radius: 5px; padding: 6px 4px; font-family: 'DM Sans', sans-serif; font-size: 12px; background: var(--cream); color: var(--charcoal); text-align: center; }
+  .recovery-input:focus { outline: none; border-color: var(--sage); }
+  .water-cell { display: flex; flex-direction: column; gap: 2px; align-items: center; }
+  .water-target { font-size: 8px; color: var(--sage-dark); font-weight: 600; background: var(--sage-light); border-radius: 4px; padding: 1px 4px; text-align: center; white-space: nowrap; }
+  .date-label { font-weight: 500; color: var(--mid); font-size: 10px; }
+  .week-sep { background: var(--charcoal); color: var(--cream); border-radius: 6px; padding: 5px 12px; font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin: 10px 0 4px; }
+
+  /* NOTES */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
+  .stat-card .val { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--sage-dark); }
+  .stat-card .lbl { font-size: 10px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--mid); margin-top: 3px; }
+  .notes-card { background: var(--white); border-radius: 12px; padding: 16px; margin-bottom: 14px; box-shadow: 0 1px 8px rgba(0,0,0,0.06); }
+  .notes-card h3 { font-family: 'Playfair Display', serif; font-size: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--sage); display: inline-block; }
+  .dot.blush { background: var(--blush); }
+  .notes-textarea { width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; background: var(--cream); color: var(--charcoal); resize: vertical; min-height: 90px; line-height: 1.6; }
+  .notes-textarea:focus { outline: none; border-color: var(--sage); }
+  .info-list { list-style: none; display: grid; gap: 8px; }
+  .info-list li { font-size: 13px; line-height: 1.5; padding: 10px 13px; background: var(--row-alt); border-radius: 8px; display: flex; gap: 11px; align-items: flex-start; }
+
+  /* FEEDBACK THREAD */
+  .thread-row td { padding: 0 !important; border-bottom: 2px solid var(--border) !important; background: #FAFAF8; }
+  .thread-wrap { padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .thread-msg { display: flex; gap: 8px; align-items: flex-start; }
+  .thread-msg.coach { flex-direction: row-reverse; }
+  .thread-avatar { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .thread-avatar.samah { background: var(--sage-light); color: var(--sage-dark); }
+  .thread-avatar.coach-av { background: var(--blush-light); color: var(--blush); }
+  .thread-bubble { max-width: 80%; padding: 7px 11px; border-radius: 10px; font-size: 12px; line-height: 1.5; }
+  .thread-bubble.samah { background: var(--sage-light); color: var(--charcoal); border-bottom-left-radius: 3px; }
+  .thread-bubble.coach-b { background: var(--blush-light); color: var(--charcoal); border-bottom-right-radius: 3px; }
+  .thread-bubble.empty { color: var(--light); font-style: italic; background: transparent; padding: 2px 0; font-size: 11px; }
+  .thread-input-row { display: flex; gap: 6px; align-items: flex-end; margin-top: 4px; }
+  .thread-input { flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-family: 'DM Sans', sans-serif; font-size: 12px; background: var(--white); color: var(--charcoal); resize: none; min-height: 34px; max-height: 80px; }
+  .thread-input:focus { outline: none; border-color: var(--sage); }
+  .thread-send { border: none; border-radius: 8px; padding: 7px 13px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .thread-send.samah { background: var(--sage-dark); color: white; }
+  .thread-send.coach-s { background: var(--blush); color: white; }
+  .coach-only-section { display: none; }
+  body.is-coach .coach-only-section { display: block; }
+  body.is-coach .coach-only { display: block; }
+  body.is-client .coach-only { display: none; }
+
+  /* SPINNER */
+  .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--sage); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 40px auto; }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .recovery-row, .recovery-header { grid-template-columns: 65px 1fr 1fr 1fr; }
+    .col-hide { display: none; }
+    .main { padding: 12px 10px 20px; }
+    .auth-card { padding: 28px 18px; }
+    .header { padding: 12px 12px 0; }
+    .tab-btn { font-size: 10px; padding: 8px 10px; }
+    .section-title { font-size: 18px; }
+    table { min-width: 480px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- AUTH SCREEN -->
+<div class="auth-screen" id="auth-screen">
+  <div class="auth-card">
+    <h1>Samah N</h1>
+    <p>Training Program — Block 1</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="setAuthMode('login', this)">Sign In</button>
+      <button class="auth-tab" onclick="setAuthMode('signup', this)">Sign Up</button>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="auth-email" placeholder="your@email.com">
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input type="password" id="auth-password" placeholder="••••••••">
+    </div>
+    <button class="auth-btn" onclick="handleAuth()">Sign In</button>
+    <p class="auth-error" id="auth-error"></p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+  <div class="header">
+    <div class="header-top">
+      <h1>Samah N — Training Program</h1>
+      <div class="header-right">
+        <span class="live-dot"></span>
+        <span style="font-size:11px;color:var(--light);">Live</span>
+        <span class="role-badge" id="role-badge">Coach</span>
+        <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+      </div>
+    </div>
+    <div class="tabs" id="tabs">
+      <button class="tab-btn active" onclick="switchTab('schedule',this)">Schedule</button>
+      <button class="tab-btn" onclick="switchTab('workout',this)">Workout</button>
+      <button class="tab-btn" onclick="switchTab('lowimpact',this)">Low Impact</button>
+      <button class="tab-btn" onclick="switchTab('recovery',this)">Recovery Tracker</button>
+      <button class="tab-btn" onclick="switchTab('notes',this)">Coaching Notes</button>
+      <button class="tab-btn week-tab" onclick="switchTab('week1',this)">📅 Week 1</button>
+      <button class="tab-btn week-tab" onclick="switchTab('week2',this)">📅 Week 2</button>
+      <button class="tab-btn" onclick="switchTab('guide',this)">Training Terms</button>
+      <button class="tab-btn coach-only-section" onclick="switchTab('review',this)">🔍 Review</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <!-- SCHEDULE -->
+    <div class="tab-content active" id="tab-schedule">
+      <p class="section-title">Weekly Schedule</p>
+      <p class="section-subtitle">Flexible 4-day program — check off as you go</p>
+      <div class="coach-banner green">
+        <strong>💬 Coach's Note:</strong> Pick any 4 days — avoid 4 in a row if possible. Stairmaster after every gym session with whatever time you have. Walking pad ×2 on non-gym days. Keep those steps at <strong>4,000–5,000/day</strong>.
+      </div>
+      <div id="checklist"></div>
+      <div class="save-row">
+        <button class="save-btn" onclick="saveChecklist()">Save Progress</button>
+        <span class="save-status" id="checklist-status"></span>
+      </div>
+    </div>
+
+    <!-- WORKOUT -->
+    <div class="tab-content" id="tab-workout">
+      <p class="section-title">Main Program — Block 1</p>
+      <p class="section-subtitle">Full Body · Bootcamp Style · Supersets · 15–20 Reps · ~45 min</p>
+      <div class="autosave-bar"><div class="autosave-dot" id="workout-save-dot"></div><span id="workout-save-text"></span></div>
+      <div class="timer-toggle-row" onclick="toggleTimer()">
+        <div class="toggle-track" id="timer-track"><div class="toggle-knob"></div></div>
+        <div><div class="toggle-label">⏱ Rest Timer</div><div class="toggle-sub">Optional — tap to turn on</div></div>
+      </div>
+      <div class="coach-banner green">
+        <strong>💬 Coach's Note:</strong> Move with purpose between supersets. Control over speed always. Single-arm and single-leg work is intentional for your body. Log your weights as you go! <strong>Protein: 100g/day. Creatine daily. Same meal + sleep times.</strong>
+      </div>
+      <div id="workout-content"></div>
+    </div>
+
+    <!-- LOW IMPACT -->
+    <div class="tab-content" id="tab-lowimpact">
+      <p class="section-title">Low Impact Program</p>
+      <p class="section-subtitle">PMS Week — Same exercises, 40% less volume, no HR finishers</p>
+      <div class="autosave-bar"><div class="autosave-dot" id="li-save-dot"></div><span id="li-save-text"></span></div>
+      <div class="coach-banner">
+        <strong>💬 Coach's Note:</strong> This week is <em>built into your plan</em> — not a detour. Same movements, lighter load, less volume. No finishers this week. Prioritise <strong>hydration, warmth, and sleep</strong> above everything.
+      </div>
+      <div id="lowimpact-content"></div>
+    </div>
+
+    <!-- RECOVERY -->
+    <div class="tab-content" id="tab-recovery">
+      <p class="section-title">Recovery Tracker</p>
+      <p class="section-subtitle">Daily log — 4 weeks</p>
+      <div class="coach-banner green">
+        <strong>💬 Coach's Note:</strong> Track every day — this data is everything. <strong>Protein: 100g/day. Vegetables: 5 servings. Creatine: daily, same time.</strong> Your water target auto-calculates from your weight.
+      </div>
+      <div class="recovery-header">
+        <div>Date</div>
+        <div>Weight (lbs)</div>
+        <div>Protein (g)<br><span style="font-size:9px;opacity:0.7;">Goal: 100g</span></div>
+        <div>Veg<br><span style="font-size:9px;opacity:0.7;">5 servings</span></div>
+        <div>Water (L)<br><span style="font-size:9px;opacity:0.7;">Auto-target</span></div>
+        <div>Sleep (hrs)</div>
+        <div>Calories<br><span style="font-size:9px;opacity:0.7;">optional</span></div>
+      </div>
+      <div class="recovery-grid" id="recovery-grid"></div>
+      <div class="save-row">
+        <button class="save-btn" onclick="saveRecovery()">Save Log</button>
+        <span class="save-status" id="recovery-status"></span>
+      </div>
+    </div>
+
+    <!-- COACHING NOTES -->
+    <div class="tab-content" id="tab-notes">
+      <p class="section-title">Coaching Notes</p>
+      <p class="section-subtitle">Client overview &amp; coach workspace — Block 1</p>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="val">162</div><div class="lbl">Current Weight</div></div>
+        <div class="stat-card"><div class="val">140–145</div><div class="lbl">Goal Weight</div></div>
+        <div class="stat-card"><div class="val">Block 1</div><div class="lbl">Current Phase</div></div>
+        <div class="stat-card"><div class="val">4 wks</div><div class="lbl">Block Length</div></div>
+        <div class="stat-card"><div class="val">100g</div><div class="lbl">Protein Goal</div></div>
+        <div class="stat-card"><div class="val">4–5k</div><div class="lbl">Steps Goal</div></div>
+      </div>
+      <div class="notes-card">
+        <h3><span class="dot"></span> Client Profile</h3>
+        <ul class="info-list">
+          <li>🦴 <span><strong>hEDS</strong> — joint stability priority. Never push end range. All unilateral work is intentional.</span></li>
+          <li>📏 <span><strong>Limb length discrepancy</strong> — single-arm/leg variations throughout. Monitor compensations.</span></li>
+          <li>🩸 <span><strong>PMS weeks</strong> — switch to Low Impact tab. Planned, not optional.</span></li>
+          <li>🏃 <span><strong>Cardio:</strong> Stairmaster post-workout. Walking pad ×2/week. Steps: 4,000–5,000/day.</span></li>
+          <li>🍽️ <span><strong>Nutrition:</strong> 3 meals/day at same times. 100g protein. Creatine daily. 5 veg servings.</span></li>
+          <li>✨ <span><strong>She loves creativity</strong> — keep it fresh each block.</span></li>
+        </ul>
+      </div>
+      <div class="notes-card coach-only-section">
+        <h3><span class="dot blush"></span> Weekly Coach Notes <span style="font-size:11px;color:var(--blush);font-family:'DM Sans',sans-serif;font-weight:400;font-style:normal;">(only you can see this)</span></h3>
+        <textarea class="notes-textarea" id="coach-notes-weekly" placeholder="Observations, wins, things to watch..."></textarea>
+      </div>
+      <div class="notes-card coach-only-section">
+        <h3><span class="dot blush"></span> Progress Notes</h3>
+        <textarea class="notes-textarea" id="coach-notes-progress" placeholder="Weight trend, energy, PRs..."></textarea>
+      </div>
+      <div class="notes-card coach-only-section">
+        <h3><span class="dot"></span> Adjustments Log</h3>
+        <textarea class="notes-textarea" id="coach-notes-adjustments" placeholder="Exercise swaps, modifications..."></textarea>
+      </div>
+      <div class="save-row coach-only-section">
+        <button class="save-btn" onclick="saveNotes()">Save Notes</button>
+        <span class="save-status" id="notes-status"></span>
+      </div>
+    </div>
+
+    <!-- WEEK 1 -->
+    <div class="tab-content" id="tab-week1">
+      <p class="section-title">📅 Week 1</p>
+      <p class="section-subtitle">Block 1 · 2 Sets · 15 Reps · Focus on form and feel</p>
+      <div class="autosave-bar"><div class="autosave-dot" id="week1-save-dot"></div><span id="week1-save-text"></span></div>
+      <div class="coach-banner green">
+        <strong>💬 Coach's Note — Week 1:</strong> Welcome to your new block, Samah! Starting at 2 sets of 15 reps. Focus on quality of movement, breathing, and getting familiar with each exercise. Log your weights — we'll build on them next week! 💪
+      </div>
+      <div id="week1-content"></div>
+      <div class="save-row">
+        <button class="save-btn" onclick="saveWeek('week1')">Save Week 1</button>
+        <span class="save-status" id="week1-status"></span>
+      </div>
+    </div>
+
+    </div>
+
+    <!-- WEEK 2 -->
+    <div class="tab-content" id="tab-week2">
+      <p class="section-title">📅 Week 2</p>
+      <p class="section-subtitle">Block 1 · 3 Sets · 15 Reps · One more set — let's build!</p>
+      <div class="autosave-bar"><div class="autosave-dot" id="week2-save-dot"></div><span id="week2-save-text"></span></div>
+      <div class="coach-banner green">
+        <strong>💬 Coach's Note — Week 2:</strong> One more set this week, Samah! Keep the same weights as Week 1 — or nudge them up slightly if everything felt easy. Focus on keeping your form sharp as the volume increases. Log everything so we can track your progress. 🔥
+      </div>
+      <div id="week2-content"></div>
+      <div class="save-row">
+        <button class="save-btn" onclick="saveWeek('week2')">Save Week 2</button>
+        <span class="save-status" id="week2-status"></span>
+      </div>
+    </div>
+
+    <!-- COACH REVIEW -->
+    <div class="tab-content coach-only-section" id="tab-review">
+      <p class="section-title">🔍 Weekly Review</p>
+      <p class="section-subtitle">Samah's logged data — coach view only</p>
+      <div class="coach-banner green">
+        <strong>Your review dashboard.</strong> Everything Samah logged this block — weights, feedback, and recovery — in one place. Use this each Sunday to plan the next week with your coach.
+      </div>
+
+      <div class="notes-card">
+        <h3><span class="dot"></span> Week 1 — Workout Log</h3>
+        <div id="review-week1"></div>
+      </div>
+
+      <div class="notes-card">
+        <h3><span class="dot"></span> Week 2 — Workout Log</h3>
+        <div id="review-week2"></div>
+      </div>
+
+      <div class="notes-card">
+        <h3><span class="dot blush"></span> Recovery — This Block</h3>
+        <div id="review-recovery"></div>
+      </div>
+    </div>
+
+    <!-- GUIDE -->
+    <div class="tab-content" id="tab-guide">
+      <p class="section-title">Training Terms</p>
+      <p class="section-subtitle">RPE, RIR &amp; quick tips</p>
+
+      <div class="notes-card">
+        <h3><span class="dot"></span> RPE &amp; RIR — what they mean</h3>
+        <p style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:14px">Two ways to describe how hard a set felt. Use whichever clicks for you — RPE 8 and 2 RIR mean the same thing.</p>
+        <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border);">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:380px;">
+            <thead>
+              <tr style="background:var(--charcoal);">
+                <th style="padding:9px 10px;color:var(--cream);font-weight:500;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">RPE</th>
+                <th style="padding:9px 10px;color:var(--cream);font-weight:500;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">Feels like</th>
+                <th style="padding:9px 10px;color:var(--cream);font-weight:500;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">RIR</th>
+                <th style="padding:9px 10px;color:var(--cream);font-weight:500;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">Bar speed</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background:var(--white);">
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);"><span style="display:inline-flex;width:26px;height:26px;border-radius:50%;align-items:center;justify-content:center;background:#EAF3DE;color:#3B6D11;font-weight:700;font-size:12px;">6</span></td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);color:var(--mid);">Easy</td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);color:var(--mid);">4+</td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);color:var(--mid);">Moves fast and smooth</td>
+              </tr>
+              <tr style="background:var(--row-alt);">
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);"><span style="display:inline-flex;width:26px;height:26px;border-radius:50%;align-items:center;justify-content:center;background:#EAF3DE;color:#3B6D11;font-weight:700;font-size:12px;">7</span></td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);color:var(--mid);">Moderate</td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);color:var(--mid);">3</td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);color:var(--mid);">Moving well, slight effort</td>
+              </tr>
+              <tr style="background:#FFF8ED;">
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);"><span style="display:inline-flex;width:26px;height:26px;border-radius:50%;align-items:center;justify-content:center;background:#FAEEDA;color:#854F0B;font-weight:700;font-size:12px;">8</span></td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);">
+                  <strong style="color:var(--charcoal);">Challenging</strong>
+                  <span style="display:inline-block;background:#FAEEDA;color:#854F0B;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:5px;letter-spacing:0.06em;text-transform:uppercase;">Target</span>
+                </td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);font-weight:600;color:var(--charcoal);">2</td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);color:var(--charcoal);">Last rep noticeably slower</td>
+              </tr>
+              <tr style="background:var(--white);">
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);"><span style="display:inline-flex;width:26px;height:26px;border-radius:50%;align-items:center;justify-content:center;background:#FCEBEB;color:#A32D2D;font-weight:700;font-size:12px;">9</span></td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);color:var(--mid);">Hard</td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);color:var(--mid);">1</td>
+                <td style="padding:10px 10px;border-bottom:1px solid var(--border);color:var(--mid);">Grinds on the last rep</td>
+              </tr>
+              <tr style="background:var(--row-alt);">
+                <td style="padding:10px 10px;"><span style="display:inline-flex;width:26px;height:26px;border-radius:50%;align-items:center;justify-content:center;background:#FCEBEB;color:#A32D2D;font-weight:700;font-size:12px;">10</span></td>
+                <td style="padding:10px 10px;color:var(--mid);">Max effort</td>
+                <td style="padding:10px 10px;color:var(--mid);">0</td>
+                <td style="padding:10px 10px;color:var(--mid);">Bar barely moves or stops. Form breaking down — you genuinely cannot do another rep.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="notes-card">
+        <h3><span class="dot"></span> Effort gauge</h3>
+        <p style="font-size:13px;color:var(--mid);line-height:1.6;margin-bottom:14px">The needle shows where most of your sets should land.</p>
+        <div style="display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+          <svg width="185" height="112" viewBox="0 0 200 120" role="img" aria-label="Effort gauge with needle pointing to RPE 8, the target zone">
+            <title>Effort gauge — target RPE 8</title>
+            <defs>
+              <linearGradient id="gGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#639922"/>
+                <stop offset="60%" stop-color="#BA7517"/>
+                <stop offset="100%" stop-color="#E24B4A"/>
+              </linearGradient>
+            </defs>
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#E4DDD3" stroke-width="16" stroke-linecap="round"/>
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gGrad)" stroke-width="16" stroke-linecap="round"/>
+            <line x1="100" y1="100" x2="52" y2="38" stroke="#2C2C2C" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="100" cy="100" r="6" fill="#2C2C2C"/>
+            <text x="100" y="76" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="22" font-weight="600" fill="#2C2C2C">8</text>
+            <text x="100" y="92" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#6B6B6B">RPE</text>
+            <text x="22" y="116" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#6B6B6B">Easy</text>
+            <text x="178" y="116" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#6B6B6B">Max</text>
+          </svg>
+          <div style="display:flex;flex-direction:column;gap:8px;padding-top:6px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;"><div style="width:10px;height:10px;border-radius:50%;background:#639922;flex-shrink:0;"></div><span style="color:var(--mid);"><strong style="color:var(--charcoal);">RPE 6–7</strong> / 3+ RIR — too easy</span></div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;"><div style="width:10px;height:10px;border-radius:50%;background:#BA7517;flex-shrink:0;"></div><span style="color:var(--mid);"><strong style="color:var(--charcoal);">RPE 8</strong> / 2 RIR — your target</span></div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;"><div style="width:10px;height:10px;border-radius:50%;background:#E24B4A;flex-shrink:0;"></div><span style="color:var(--mid);"><strong style="color:var(--charcoal);">RPE 9–10</strong> / 0–1 RIR — too hard</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes-card">
+        <h3><span class="dot"></span> Quick tips</h3>
+        <ul class="info-list">
+          <li>📱 <span>Add this to your <strong>home screen</strong> — in Safari tap Share → "Add to Home Screen" and it'll look like a real app.</span></li>
+          <li>💾 <span>Your data <strong>auto-saves</strong> as you type — you'll see a small dot confirm it.</span></li>
+          <li>🌿 <span>On your PMS week, switch to the <strong>Low Impact</strong> tab. No guilt — it's part of the program.</span></li>
+          <li>💬 <span>Your coach can see everything you log. The more detail you give, the better she can help you.</span></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ─── CONFIG ───────────────────────────────────────────────
+// Replace these with your actual Supabase credentials
+const SUPABASE_URL = 'https://fftbjwktufjdiomsoqxa.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_LKx708asdFhNt0Z5j9cn_Q_y5_PDumX';
+const COACH_EMAIL = 'salfoodlog@gmail.com';
+
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ─── STATE ────────────────────────────────────────────────
+let currentUser = null;
+let isCoach = false;
+let authMode = 'login';
+let recoveryData = {};
+let checklistData = {};
+let workoutData = {};
+let saveTimeout = null;
+let timerOn = false;
+let timerInterval = null;
+let timerSecs = 0;
+
+// ─── AUTH ─────────────────────────────────────────────────
+function setAuthMode(mode, btn) {
+  authMode = mode;
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelector('.auth-btn').textContent = mode === 'login' ? 'Sign In' : 'Create Account';
+}
+
+async function handleAuth() {
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const errEl = document.getElementById('auth-error');
+  errEl.textContent = '';
+
+  if (!email || !password) { errEl.textContent = 'Please enter email and password.'; return; }
+  if (password.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; return; }
+
+  errEl.textContent = 'Signing in...';
+
+  try {
+    let result;
+    if (authMode === 'login') {
+      result = await supabaseClient.auth.signInWithPassword({ email, password });
+    } else {
+      result = await supabaseClient.auth.signUp({ email, password });
+    }
+    console.log('Auth result:', result);
+    if (result.error) { errEl.textContent = result.error.message; return; }
+    if (result.data.user) { errEl.textContent = ''; initApp(result.data.user); }
+    else { errEl.textContent = 'Check your email to confirm your account, then sign in.'; }
+  } catch(e) {
+    console.error('Auth error:', e);
+    errEl.textContent = 'Connection error — please try again.';
+  }
+}
+
+async function handleLogout() {
+  await supabaseClient.auth.signOut();
+  currentUser = null;
+  document.getElementById('auth-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  document.body.classList.remove('is-coach', 'is-client');
+}
+
+async function checkSession() {
+  // PREVIEW MODE — if opened as a local file, skip login
+  if (window.location.protocol === 'file:') {
+    const bar = document.createElement('div');
+    bar.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#7A9E7E;color:white;text-align:center;font-size:12px;font-weight:600;padding:6px;z-index:9999;font-family:DM Sans,sans-serif;letter-spacing:0.05em';
+    bar.textContent = '👁 PREVIEW MODE — login + save disabled';
+    document.body.prepend(bar);
+    setTimeout(() => {
+      const header = document.querySelector('.header');
+      if (header) header.style.top = '29px';
+    }, 50);
+    initApp({ id: 'preview-user', email: 'preview@preview.com' });
+    return;
+  }
+  const { data } = await supabaseClient.auth.getSession();
+  if (data.session?.user) {
+    initApp(data.session.user);
+  } else {
+    document.getElementById('auth-screen').style.display = 'flex';
+  }
+}
+
+function initApp(user) {
+  currentUser = user;
+  isCoach = user.email === COACH_EMAIL;
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.body.classList.add(isCoach ? 'is-coach' : 'is-client');
+  document.getElementById('role-badge').textContent = isCoach ? 'Coach' : 'Samah';
+  document.getElementById('role-badge').className = 'role-badge ' + (isCoach ? 'coach' : 'client');
+  buildChecklist();
+  buildWorkoutTab();
+  buildLowImpactTab();
+  buildRecovery();
+  buildWeek1();
+  buildWeek2();
+  if (isCoach) buildReview();
+  loadAllData();
+}
+
+// ─── TAB SWITCHING ─────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ─── EXERCISES DATA ────────────────────────────────────────
+const workouts = {
+  A: {
+    title: 'Workout A — Full Body (Lower emphasis)',
+    exercises: [
+      { id:'A', name:'Lateral band walk', tag:'warmup', reps:'15 each way', sets:'1', weight:'Band', rest:'30s', note:'Stay low, tension in band the whole time' },
+      { id:'B1', name:'Heel elevated goblet squat', tag:'superset', reps:'15–20', sets:'3', rest:'15s', note:'Heels on plates, full depth, slow eccentric' },
+      { id:'B2', name:'DB Romanian deadlift', tag:'superset', reps:'15–20', sets:'3', rest:'1m', note:'Hinge at hip, soft knees, feel the hamstring stretch' },
+      { id:'C1', name:'Single-arm DB bent over row', tag:'superset', reps:'15 each', sets:'3', rest:'15s', note:'Brace core, elbow drives back — full range' },
+      { id:'C2', name:'DB chest press — flat bench', tag:'superset', reps:'15–20', sets:'3', rest:'1m', note:'Full body tension — feet flat, lower back neutral' },
+      { id:'D1', name:'Walking lunges — DB', tag:'superset stability', reps:'16 total', sets:'3', rest:'15s', note:'Control the descent, drive through front heel' },
+      { id:'D2', name:'DB lateral raises', tag:'superset', reps:'15–20', sets:'3', rest:'1m', note:'Lead with elbow, not the wrist' },
+      { id:'E', name:'Box step-ups — alternating', tag:'core', label:'HR Finisher', reps:'20 total', sets:'2', rest:'1m', note:'Drive through the heel — stay tall' },
+    ]
+  },
+  B: {
+    title: 'Workout B — Full Body (Upper emphasis)',
+    exercises: [
+      { id:'A', name:'Dead bug', tag:'warmup', reps:'10 each side', sets:'1', weight:'BW', rest:'30s', note:'Lower back stays flat — slow and controlled' },
+      { id:'B1', name:'Single-arm DB shoulder press', tag:'superset stability', reps:'15 each', sets:'3', rest:'15s', note:'Core braced — lighter bar or both hands if needed' },
+      { id:'B2', name:'Band pull-up / pull-up machine', tag:'superset', reps:'10–12', sets:'3', rest:'1m', note:'Full hang at bottom, chin over bar' },
+      { id:'C1', name:'DB sumo squat', tag:'superset', reps:'15–20', sets:'3', rest:'15s', note:'Wide stance, toes out — sit deep' },
+      { id:'C2', name:'DB chest-supported row', tag:'superset', reps:'15–20', sets:'3', rest:'1m', note:'Squeeze at the top' },
+      { id:'D1', name:'DB hip thrust — both legs', tag:'superset', reps:'15–20', sets:'3', rest:'15s', note:'Drive through heels, squeeze glutes at top' },
+      { id:'D2', name:'DB bicep curl + shoulder press combo', tag:'superset', reps:'15', sets:'3', rest:'1m', note:'Curl up then press — one fluid movement', link:'https://www.youtube.com/results?search_query=dumbbell+curl+to+press+combo' },
+      { id:'E', name:'Battle ropes — alternating waves', tag:'core', label:'HR Finisher', reps:'30s on / 20s off', sets:'3', rest:'—', note:'Drive from the core — not just the arms' },
+    ]
+  },
+  C: {
+    title: 'Workout C — Full Body (Posterior Chain)',
+    exercises: [
+      { id:'A', name:'90/90 hip switch + breathing', tag:'warmup', reps:'5 each side', sets:'1', weight:'BW', rest:'30s', note:'Slow and intentional — open hips before loading', link:'https://www.youtube.com/results?search_query=90+90+hip+switch+mobility' },
+      { id:'B1', name:'Seated leg curl machine', tag:'superset', reps:'15–20', sets:'3', rest:'15s', note:'3s eccentric on the way down' },
+      { id:'B2', name:'DB step-back lunge', tag:'superset', reps:'15 each', sets:'3', rest:'1m', note:'Control the descent — front heel stays down' },
+      { id:'C1', name:'DB sumo deadlift', tag:'superset', reps:'15–20', sets:'3', rest:'15s', note:'Wide stance, hinge and drive the floor away' },
+      { id:'C2', name:'DB push press — both arms', tag:'superset', reps:'15–20', sets:'3', rest:'1m', note:'Small dip at knees — full lockout overhead' },
+      { id:'D1', name:'Abduction machine', tag:'superset', reps:'15–20', sets:'3', rest:'15s', note:'Controlled — don\'t let weight slam back' },
+      { id:'D2', name:'Half-kneeling cable chop', tag:'superset core', label:'Core', reps:'12–15 each', sets:'3', rest:'1m', note:'Rotate from the core — hips stay square', link:'https://www.youtube.com/results?search_query=half+kneeling+cable+chop+core' },
+      { id:'E', name:'Rowing machine sprint', tag:'core', label:'HR Finisher', reps:'250m sprint', sets:'2', rest:'1m 30s', note:'Full effort — legs drive first, then pull' },
+    ]
+  },
+  D: {
+    title: 'Workout D — Full Body (Push/Pull balance)',
+    exercises: [
+      { id:'A', name:'Bird dog', tag:'warmup', reps:'10 each side', sets:'1', weight:'BW', rest:'30s', note:'Slow, hips level — pause at full extension' },
+      { id:'B1', name:'DB goblet curtsy lunge', tag:'superset', reps:'15 each', sets:'3', rest:'15s', note:'Slow cross behind — keep hips square' },
+      { id:'B2', name:'Wide grip lat pull-down', tag:'superset', reps:'15–20', sets:'3', rest:'1m', note:'Lead with elbows, slight lean back — full stretch at top' },
+      { id:'C1', name:'DB single-arm Romanian deadlift', tag:'superset stability', reps:'15 each', sets:'3', rest:'15s', note:'Pause at the bottom — control the balance' },
+      { id:'C2', name:'DB chest fly — flat bench', tag:'superset', reps:'15–20', sets:'3', rest:'1m', note:'Slight bend in elbow — squeeze at top' },
+      { id:'D1', name:'Single-arm DB lateral raise', tag:'superset', reps:'15 each', sets:'3', rest:'15s', note:'Lead with elbow — hold 1s at top' },
+      { id:'D2', name:'Seated cable row — neutral grip', tag:'superset', reps:'15–20', sets:'3', rest:'1m', note:'Full retraction — squeeze shoulder blades' },
+      { id:'E', name:'Sled push / pull', tag:'core', label:'HR Finisher', reps:'20m push + 20m pull', sets:'2', weight:'Light', rest:'1m 30s', note:'Stay low on push, lean back on pull' },
+    ]
+  }
+};
+
+const lowImpactWorkouts = {
+  A: {
+    title: 'Low Impact A — Full Body (Lower emphasis)',
+    exercises: [
+      { id:'A', name:'Lateral band walk', tag:'warmup', reps:'10 each way', sets:'1', weight:'Light band', rest:'30s', note:'Stay low, gentle tension' },
+      { id:'B1', name:'Heel elevated goblet squat', tag:'superset', reps:'12–15', sets:'2', rest:'15s', note:'Heels on plates, full depth, slow eccentric' },
+      { id:'B2', name:'DB Romanian deadlift', tag:'superset', reps:'12–15', sets:'2', rest:'1m', note:'Hinge at hip, soft knees, feel the stretch' },
+      { id:'C1', name:'Single-arm DB bent over row', tag:'superset', reps:'12 each', sets:'2', rest:'15s', note:'Brace core, full range' },
+      { id:'C2', name:'DB chest press — flat bench', tag:'superset', reps:'12–15', sets:'2', rest:'1m', note:'Lower back neutral, controlled movement' },
+    ]
+  },
+  B: {
+    title: 'Low Impact B — Full Body (Upper emphasis)',
+    exercises: [
+      { id:'A', name:'Dead bug', tag:'warmup', reps:'8 each side', sets:'1', weight:'BW', rest:'30s', note:'Lower back flat — slow and controlled' },
+      { id:'B1', name:'DB shoulder press — both arms, seated', tag:'superset', reps:'12–15', sets:'2', rest:'15s', note:'Both arms this week — lighter than usual' },
+      { id:'B2', name:'Band pull-up / pull-up machine', tag:'superset', reps:'6–8', sets:'2', rest:'1m', note:'More assistance than usual — full hang at bottom' },
+      { id:'C1', name:'DB hip thrust — both legs', tag:'superset', reps:'12–15', sets:'2', rest:'15s', note:'Drive through heels, squeeze at top' },
+      { id:'C2', name:'DB chest-supported row', tag:'superset', reps:'12–15', sets:'2', rest:'1m', note:'Squeeze at the top — quality over load' },
+    ]
+  },
+  C: {
+    title: 'Low Impact C — Full Body (Posterior Chain)',
+    exercises: [
+      { id:'A', name:'90/90 hip switch + breathing', tag:'warmup', reps:'5 each side', sets:'1', weight:'BW', rest:'30s', note:'Slow and intentional', link:'https://www.youtube.com/results?search_query=90+90+hip+switch+mobility' },
+      { id:'B1', name:'Seated leg curl machine', tag:'superset', reps:'12–15', sets:'2', rest:'15s', note:'3s eccentric — slow and controlled' },
+      { id:'B2', name:'DB step-back lunge', tag:'superset', reps:'10 each', sets:'2', rest:'1m', note:'Control the descent — no weight if needed' },
+      { id:'C1', name:'DB sumo deadlift', tag:'superset', reps:'12–15', sets:'2', rest:'15s', note:'Wide stance, hinge and drive the floor away' },
+      { id:'C2', name:'DB push press — both arms', tag:'superset', reps:'12–15', sets:'2', rest:'1m', note:'Small dip at knees — full lockout overhead' },
+    ]
+  },
+  D: {
+    title: 'Low Impact D — Full Body (Push/Pull)',
+    exercises: [
+      { id:'A', name:'Bird dog', tag:'warmup', reps:'8 each side', sets:'1', weight:'BW', rest:'30s', note:'Slow, hips level — pause at full extension' },
+      { id:'B1', name:'DB goblet curtsy lunge', tag:'superset', reps:'10 each', sets:'2', rest:'15s', note:'Slow cross behind — keep hips square' },
+      { id:'B2', name:'Wide grip lat pull-down', tag:'superset', reps:'12–15', sets:'2', rest:'1m', note:'Full stretch at top — lead with elbows' },
+      { id:'C1', name:'DB lateral raise — both arms', tag:'superset', reps:'12–15', sets:'2', rest:'15s', note:'Lead with elbow — no swinging' },
+      { id:'C2', name:'Seated cable row — neutral grip', tag:'superset', reps:'12–15', sets:'2', rest:'1m', note:'Full retraction — squeeze shoulder blades' },
+    ]
+  }
+};
+
+const week1Exercises = {
+  A: { sets: '2', reps: '15' },
+  B: { sets: '2', reps: '15' },
+  C: { sets: '2', reps: '15' },
+  D: { sets: '2', reps: '15' }
+};
+
+// ─── BUILD EXERCISE TABLE ──────────────────────────────────
+function buildExerciseTable(exercises, tableKey, isWeek = false) {
+  let html = `<div class="table-wrap"><table>
+    <thead><tr>
+      <th></th><th>Exercise</th><th>Reps</th><th>Sets</th><th>Weight Used</th><th>Rest</th>
+      <th>Notes</th><th>How did it feel?</th>
+    </tr></thead><tbody>`;
+
+  exercises.forEach(ex => {
+    const tags = ex.tag ? ex.tag.split(' ').map(t =>
+      `<span class="tag tag-${t}">${t === 'warmup' ? 'Warm-up' : t === 'superset' ? 'Superset' : t === 'stability' ? 'Stability' : t === 'core' ? (ex.label || 'Core') : t}</span>`
+    ).join('') : '';
+    const link = ex.link ? ` <a href="${ex.link}" target="_blank" style="font-size:10px;color:var(--sage-dark);text-decoration:underline;">▶ Watch demo</a>` : '';
+    const key = `${tableKey}-${ex.id}`;
+
+    const restSecs = ex.rest ? (ex.rest.includes('m') ? (parseInt(ex.rest)*60 + (ex.rest.includes(' ')? parseInt(ex.rest.split(' ')[1]):0)) : parseInt(ex.rest)) : 0;
+    const restMin = Math.floor(restSecs/60); const restS = restSecs%60;
+    const timerBox = restSecs ? `<div class="rest-timer-box" style="display:none;">
+      <div><div style="font-size:10px;color:var(--mid);margin-bottom:2px">Rest: ${ex.rest}</div><div class="timer-display">${restMin}:${restS.toString().padStart(2,'0')}</div></div>
+      <div class="timer-controls"><button class="timer-btn start" onclick="startTimer(${restSecs})">▶ Start</button><button class="timer-btn reset" onclick="resetTimer(${restSecs})">↺</button></div>
+    </div>` : '';
+
+    html += `<tr>
+      <td class="ex-id">${ex.id}</td>
+      <td>${ex.name}${tags}${link}${timerBox}</td>
+      <td>${ex.reps}</td>
+      <td>${ex.sets}</td>
+      <td><input class="cell-input" data-key="${key}-weight" placeholder="lbs/kg" oninput="cacheInput(this)" style="min-width:70px;"></td>
+      <td>${ex.rest}</td>
+      <td class="note-cell">${ex.note}</td>
+      <td><textarea class="cell-input" data-key="${key}-feel" placeholder="Notes..." oninput="cacheInput(this)"></textarea></td>
+    </tr>
+    <tr class="thread-row"><td colspan="8">${buildThread(key)}</td></tr>`;
+  });
+
+  html += '</tbody></table></div>';
+  return html;
+}
+
+function buildWorkoutTab() {
+  let html = '';
+  Object.entries(workouts).forEach(([key, workout]) => {
+    html += `<div class="workout-block">
+      <div class="workout-block-title">Workout ${key} — ${workout.title.split('—')[1]?.trim() || ''}</div>
+      ${buildExerciseTable(workout.exercises, `main-${key}`)}
+    </div>`;
+  });
+  html += `<div class="save-row"><button class="save-btn" onclick="saveWorkout('main')">Save Workout Log</button><span class="save-status" id="main-status"></span></div>`;
+  document.getElementById('workout-content').innerHTML = html;
+}
+
+function buildLowImpactTab() {
+  let html = '';
+  Object.entries(lowImpactWorkouts).forEach(([key, workout]) => {
+    html += `<div class="workout-block">
+      <div class="workout-block-title blush-title">${workout.title}</div>
+      ${buildExerciseTable(workout.exercises, `li-${key}`)}
+    </div>`;
+  });
+  html += `<div class="save-row"><button class="save-btn" onclick="saveWorkout('lowimpact')">Save Low Impact Log</button><span class="save-status" id="lowimpact-status"></span></div>`;
+  document.getElementById('lowimpact-content').innerHTML = html;
+}
+
+function buildWeek1() {
+  let html = '';
+  Object.entries(workouts).forEach(([key, workout]) => {
+    const w1exs = workout.exercises.map(ex => ({
+      ...ex,
+      sets: ex.id === 'A' ? '1' : '2',
+      reps: ex.id === 'A' ? ex.reps : '15',
+    }));
+    html += `<div class="workout-block">
+      <div class="workout-block-title">Workout ${key} · 2 sets · 15 reps</div>
+      ${buildExerciseTable(w1exs, `main-${key}`, true)}
+    </div>`;
+  });
+  document.getElementById('week1-content').innerHTML = html;
+}
+
+function buildWeek2() {
+  let html = '';
+  Object.entries(workouts).forEach(([key, workout]) => {
+    const w2exs = workout.exercises.map(ex => ({
+      ...ex,
+      sets: ex.id === 'A' ? '1' : '3',
+      reps: ex.id === 'A' ? ex.reps : '15',
+      wk1hint: workoutData[`main-${key}-${ex.id}-weight`] || null,
+    }));
+    html += `<div class="workout-block">
+      <div class="workout-block-title">Workout ${key} · 3 sets · 15 reps</div>
+      ${buildWeek2Table(w2exs, `main-${key}`)}
+    </div>`;
+  });
+  document.getElementById('week2-content').innerHTML = html;
+}
+
+function buildWeek2Table(exercises, tableKey) {
+  let html = `<div class="table-wrap"><table>
+    <thead><tr>
+      <th></th><th>Exercise</th><th>Reps</th><th>Sets</th><th>Wk 1 Used</th><th>Weight Used</th><th>Rest</th>
+      <th>Notes</th><th>How did it feel?</th>
+    </tr></thead><tbody>`;
+
+  exercises.forEach(ex => {
+    const tags = ex.tag ? ex.tag.split(' ').map(t =>
+      `<span class="tag tag-${t}">${t === 'warmup' ? 'Warm-up' : t === 'superset' ? 'Superset' : t === 'stability' ? 'Stability' : t === 'core' ? (ex.label || 'Core') : t}</span>`
+    ).join('') : '';
+    const link = ex.link ? ` <a href="${ex.link}" target="_blank" style="font-size:10px;color:var(--sage-dark);text-decoration:underline;">▶ Watch demo</a>` : '';
+    const key = `${tableKey}-${ex.id}`;
+    const wk1display = ex.wk1hint
+      ? `<span style="font-weight:600;color:var(--sage-dark);">${ex.wk1hint}</span>`
+      : `<span style="color:var(--light);font-style:italic;">—</span>`;
+
+    const restSecs = ex.rest ? (ex.rest.includes('m') ? (parseInt(ex.rest)*60 + (ex.rest.includes(' ')? parseInt(ex.rest.split(' ')[1]):0)) : parseInt(ex.rest)) : 0;
+    const restMin = Math.floor(restSecs/60); const restS = restSecs%60;
+    const timerBox = restSecs ? `<div class="rest-timer-box" style="display:none;">
+      <div><div style="font-size:10px;color:var(--mid);margin-bottom:2px">Rest: ${ex.rest}</div><div class="timer-display">${restMin}:${restS.toString().padStart(2,'0')}</div></div>
+      <div class="timer-controls"><button class="timer-btn start" onclick="startTimer(${restSecs})">▶ Start</button><button class="timer-btn reset" onclick="resetTimer(${restSecs})">↺</button></div>
+    </div>` : '';
+
+    html += `<tr>
+      <td class="ex-id">${ex.id}</td>
+      <td>${ex.name}${tags}${link}${timerBox}</td>
+      <td>${ex.reps}</td>
+      <td>${ex.sets}</td>
+      <td style="text-align:center;">${wk1display}</td>
+      <td><input class="cell-input" data-key="${key}-weight" placeholder="lbs/kg" oninput="cacheInput(this)" style="min-width:70px;"></td>
+      <td>${ex.rest}</td>
+      <td class="note-cell">${ex.note}</td>
+      <td><textarea class="cell-input" data-key="${key}-feel" placeholder="Notes..." oninput="cacheInput(this)"></textarea></td>
+    </tr>
+    <tr class="thread-row"><td colspan="9">${buildThread(key)}</td></tr>`;
+  });
+
+  html += '</tbody></table></div>';
+  return html;
+}
+
+function buildReview() {
+  if (!isCoach) return;
+
+  // ── Week 1 & 2 workout summary ──
+  ['week1','week2'].forEach(wk => {
+    const container = document.getElementById(`review-${wk}`);
+    if (!container) return;
+    let html = '';
+    Object.entries(workouts).forEach(([wKey, workout]) => {
+      const rows = workout.exercises.map(ex => {
+        const weight = workoutData[`main-${wKey}-${ex.id}-weight`] || '—';
+        const feel   = workoutData[`main-${wKey}-${ex.id}-feel`]   || '—';
+        if (weight === '—' && feel === '—') return '';
+        return `<tr>
+          <td style="padding:7px 10px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--sage-dark);">${ex.id}</td>
+          <td style="padding:7px 10px;border-bottom:1px solid var(--border);font-size:12px;">${ex.name}</td>
+          <td style="padding:7px 10px;border-bottom:1px solid var(--border);font-size:12px;color:var(--sage-dark);font-weight:600;">${weight}</td>
+          <td style="padding:7px 10px;border-bottom:1px solid var(--border);font-size:12px;color:var(--mid);font-style:italic;">${feel}</td>
+        </tr>`;
+      }).filter(Boolean).join('');
+
+      if (rows) {
+        html += `<p style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);margin:12px 0 6px;">Workout ${wKey}</p>
+        <div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border);margin-bottom:10px;">
+          <table style="width:100%;border-collapse:collapse;min-width:340px;">
+            <thead><tr style="background:var(--charcoal);">
+              <th style="padding:7px 10px;color:var(--cream);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;"></th>
+              <th style="padding:7px 10px;color:var(--cream);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">Exercise</th>
+              <th style="padding:7px 10px;color:var(--cream);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">Weight Used</th>
+              <th style="padding:7px 10px;color:var(--cream);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">How it felt</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+      }
+    });
+    container.innerHTML = html || '<p style="font-size:13px;color:var(--mid);padding:8px 0;">No data logged yet.</p>';
+  });
+
+  // ── Recovery summary ──
+  const recContainer = document.getElementById('review-recovery');
+  if (!recContainer) return;
+  const entries = Object.entries(recoveryData)
+    .filter(([,v]) => v.weight || v.protein)
+    .sort(([a],[b]) => a.localeCompare(b));
+
+  if (!entries.length) {
+    recContainer.innerHTML = '<p style="font-size:13px;color:var(--mid);padding:8px 0;">No recovery data logged yet.</p>';
+    return;
+  }
+
+  let recHtml = `<div style="overflow-x:auto;border-radius:8px;border:1px solid var(--border);">
+    <table style="width:100%;border-collapse:collapse;font-size:12px;min-width:400px;">
+      <thead><tr style="background:var(--charcoal);">
+        <th style="padding:7px 10px;color:var(--cream);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">Date</th>
+        <th style="padding:7px 10px;color:var(--cream);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">Weight</th>
+        <th style="padding:7px 10px;color:var(--cream);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">Protein</th>
+        <th style="padding:7px 10px;color:var(--cream);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">Water</th>
+        <th style="padding:7px 10px;color:var(--cream);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">Sleep</th>
+        <th style="padding:7px 10px;color:var(--cream);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;text-align:left;">Veg</th>
+      </tr></thead>
+      <tbody>`;
+
+  entries.forEach(([date, v], i) => {
+    const label = new Date(date).toLocaleDateString('en-US', {month:'short', day:'numeric'});
+    const bg = i % 2 === 0 ? 'var(--white)' : 'var(--row-alt)';
+    const proteinOk = v.protein && parseInt(v.protein) >= 100;
+    recHtml += `<tr style="background:${bg};">
+      <td style="padding:7px 10px;border-bottom:1px solid var(--border);font-weight:600;">${label}</td>
+      <td style="padding:7px 10px;border-bottom:1px solid var(--border);">${v.weight ? v.weight + ' lbs' : '—'}</td>
+      <td style="padding:7px 10px;border-bottom:1px solid var(--border);${proteinOk ? 'color:var(--sage-dark);font-weight:600;' : 'color:var(--blush);'}">${v.protein ? v.protein + 'g' : '—'}</td>
+      <td style="padding:7px 10px;border-bottom:1px solid var(--border);">${v.water ? v.water + 'L' : '—'}</td>
+      <td style="padding:7px 10px;border-bottom:1px solid var(--border);">${v.sleep ? v.sleep + 'h' : '—'}</td>
+      <td style="padding:7px 10px;border-bottom:1px solid var(--border);">${v.veg ? v.veg + '/5' : '—'}</td>
+    </tr>`;
+  });
+
+  recHtml += `</tbody></table></div>`;
+  recContainer.innerHTML = recHtml;
+}
+
+// ─── CHECKLIST ─────────────────────────────────────────────
+const checklistItems = [
+  { id:'wa', label:'Workout A', desc:'Full Body Lower · ~45 min + Stairmaster' },
+  { id:'wb', label:'Workout B', desc:'Full Body Upper · ~45 min + Stairmaster' },
+  { id:'wc', label:'Workout C', desc:'Full Body Posterior Chain · ~45 min + Stairmaster' },
+  { id:'wd', label:'Workout D', desc:'Full Body Push/Pull · ~45 min + Stairmaster' },
+  { id:'walk1', label:'Walking Pad — Session 1', desc:'Rest day · 30–45 min · 4,000–5,000 steps' },
+  { id:'walk2', label:'Walking Pad — Session 2', desc:'Rest day · 30–45 min · 4,000–5,000 steps' },
+  { id:'creatine', label:'Creatine — Daily', desc:'Same time every day' },
+  { id:'protein', label:'Hit 100g Protein', desc:'3 meals at consistent times · 5 servings of vegetables' },
+  { id:'sleep', label:'Consistent Sleep Window', desc:'Same bedtime + wake time every night' },
+];
+
+function buildChecklist() {
+  const c = document.getElementById('checklist');
+  c.innerHTML = '';
+  checklistItems.forEach(item => {
+    const checked = checklistData[item.id] || false;
+    const div = document.createElement('div');
+    div.style.cssText = `background:white;border-radius:10px;padding:16px 18px;margin-bottom:10px;display:flex;align-items:flex-start;gap:14px;box-shadow:0 1px 6px rgba(0,0,0,0.05);`;
+    div.innerHTML = `
+      <div onclick="toggleCheck('${item.id}',this)" style="width:20px;height:20px;min-width:20px;border:2px solid var(--border);border-radius:5px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all 0.2s;${checked?'background:var(--sage);border-color:var(--sage);':''}">${checked?'<span style="color:white;font-size:12px;font-weight:700;">✓</span>':''}</div>
+      <div>
+        <div style="font-weight:500;font-size:14px;margin-bottom:4px;${checked?'text-decoration:line-through;color:var(--light);':''}">${item.label}</div>
+        <div style="font-size:12px;color:var(--mid);">${item.desc}</div>
+      </div>`;
+    c.appendChild(div);
+  });
+}
+
+function toggleCheck(id, el) {
+  checklistData[id] = !checklistData[id];
+  buildChecklist();
+}
+
+// ─── INPUT CACHING ─────────────────────────────────────────
+// ─── FEEDBACK THREAD ───────────────────────────────────────
+// Messages stored as: workoutData[`${key}-thread`] = [{role:'coach'|'samah', text, ts}]
+
+function buildThread(key) {
+  const msgs = workoutData[`${key}-thread`] || [];
+  const role = isCoach ? 'coach' : 'samah';
+  const sendLabel = isCoach ? 'Respond' : 'Reply';
+  const sendClass = isCoach ? 'coach-s' : 'samah';
+  const placeholder = isCoach ? 'Leave feedback or weight recommendation...' : 'Reply to your coach...';
+
+  let msgsHtml = '';
+  if (!msgs.length) {
+    msgsHtml = isCoach
+      ? `<div style="font-size:11px;color:var(--light);font-style:italic;padding:2px 0;">No messages yet — leave feedback below.</div>`
+      : '';
+  } else {
+    msgs.forEach(m => {
+      const isCoachMsg = m.role === 'coach';
+      const avatarClass = isCoachMsg ? 'coach-av' : 'samah';
+      const bubbleClass = isCoachMsg ? 'coach-b' : 'samah';
+      const initial = isCoachMsg ? 'S' : 'Sa';
+      const align = isCoachMsg ? 'coach' : '';
+      msgsHtml += `<div class="thread-msg ${align}">
+        <div class="thread-avatar ${avatarClass}">${initial}</div>
+        <div class="thread-bubble ${bubbleClass}">${escHtml(m.text)}</div>
+      </div>`;
+    });
+  }
+
+  // Only show input if: coach always, samah only if coach has messaged first
+  const coachHasMessaged = msgs.some(m => m.role === 'coach');
+  const showInput = isCoach || coachHasMessaged;
+
+  const inputHtml = showInput ? `
+    <div class="thread-input-row">
+      <textarea class="thread-input" id="ti-${key}" placeholder="${placeholder}" rows="1"
+        onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage('${key}')}"
+      ></textarea>
+      <button class="thread-send ${sendClass}" onclick="sendMessage('${key}')">${sendLabel}</button>
+    </div>` : '';
+
+  return `<div class="thread-wrap">${msgsHtml}${inputHtml}</div>`;
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+function sendMessage(key) {
+  const input = document.getElementById('ti-' + key);
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  const role = isCoach ? 'coach' : 'samah';
+  if (!workoutData[`${key}-thread`]) workoutData[`${key}-thread`] = [];
+  workoutData[`${key}-thread`].push({ role, text, ts: Date.now() });
+  input.value = '';
+  // Refresh just this thread cell without rebuilding entire table
+  const threadCells = document.querySelectorAll('.thread-row td');
+  threadCells.forEach(cell => {
+    const btn = cell.querySelector(`[onclick="sendMessage('${key}')"]`);
+    if (btn) cell.innerHTML = buildThread(key);
+  });
+  scheduleAutoSave();
+}
+
+function refreshAllThreads() {
+  // Re-render every thread cell now that workoutData is populated
+  document.querySelectorAll('.thread-row td').forEach(cell => {
+    // Extract key from the send button or input inside
+    const btn = cell.querySelector('.thread-send');
+    if (!btn) return;
+    const match = btn.getAttribute('onclick')?.match(/sendMessage\('(.+?)'\)/);
+    if (match) cell.innerHTML = buildThread(match[1]);
+  });
+}
+
+function cacheInput(el) {
+  workoutData[el.dataset.key] = el.value;
+  // If a main workout weight was entered, refresh Week 2 hints
+  // then restore any other values already typed
+  if (el.dataset.key && el.dataset.key.startsWith('main-') && el.dataset.key.endsWith('-weight')) {
+    buildWeek2();
+    document.querySelectorAll('[data-key]').forEach(input => {
+      if (workoutData[input.dataset.key]) input.value = workoutData[input.dataset.key];
+    });
+  }
+  scheduleAutoSave();
+}
+
+// ─── AUTO-SAVE ─────────────────────────────────────────────
+function scheduleAutoSave() {
+  setAllSaveStatus('saving');
+  if (saveTimeout) clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(doAutoSave, 1500);
+}
+
+async function doAutoSave() {
+  if (!currentUser || currentUser.id === 'preview-user') {
+    setAllSaveStatus('saved'); return;
+  }
+  try {
+    const { error } = await supabaseClient.from('workout_logs').upsert(
+      { user_id: currentUser.id, data: workoutData }, { onConflict: 'user_id' }
+    );
+    setAllSaveStatus(error ? 'error' : 'saved');
+  } catch(e) { setAllSaveStatus('error'); }
+}
+
+function setAllSaveStatus(status) {
+  const msgs = { saving: 'Saving...', saved: 'All saved ✓', error: 'Could not save — check connection' };
+  ['workout','li','week1','week2'].forEach(prefix => {
+    const dot = document.getElementById(prefix + '-save-dot');
+    const text = document.getElementById(prefix + '-save-text');
+    if (!dot || !text) return;
+    dot.className = 'autosave-dot ' + status;
+    text.textContent = msgs[status] || '';
+    if (status === 'saved') setTimeout(() => { if (text) text.textContent = ''; }, 3000);
+  });
+}
+
+// ─── REST TIMER ─────────────────────────────────────────────
+function toggleTimer() {
+  timerOn = !timerOn;
+  const track = document.getElementById('timer-track');
+  if (track) track.classList.toggle('on', timerOn);
+  document.querySelectorAll('.rest-timer-box').forEach(box => {
+    box.style.display = timerOn ? 'flex' : 'none';
+  });
+  const sub = document.querySelector('.toggle-sub');
+  if (sub) sub.textContent = timerOn ? 'On — tap to turn off' : 'Optional — tap to turn on';
+}
+
+function startTimer(secs) {
+  if (timerInterval) clearInterval(timerInterval);
+  timerSecs = secs;
+  updateTimerDisplays();
+  timerInterval = setInterval(() => {
+    timerSecs--;
+    updateTimerDisplays();
+    if (timerSecs <= 0) { clearInterval(timerInterval); timerInterval = null; playBeep(); }
+  }, 1000);
+}
+
+function resetTimer(secs) {
+  if (timerInterval) clearInterval(timerInterval);
+  timerSecs = secs; updateTimerDisplays();
+}
+
+function updateTimerDisplays() {
+  const m = Math.floor(timerSecs / 60);
+  const s = timerSecs % 60;
+  const display = `${m}:${s.toString().padStart(2, '0')}`;
+  document.querySelectorAll('.timer-display').forEach(el => {
+    el.textContent = display;
+    el.className = 'timer-display ' + (timerSecs > 0 ? 'running' : 'done');
+  });
+}
+
+function playBeep() {
+  try {
+    const ctx = new AudioContext();
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.frequency.value = 880;
+    g.gain.setValueAtTime(0.3, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+    o.start(); o.stop(ctx.currentTime + 0.6);
+  } catch(e) {}
+}
+
+// ─── RECOVERY ──────────────────────────────────────────────
+function calcWater(w) {
+  if (!w || isNaN(w)) return null;
+  return (w * 0.5 / 33.814).toFixed(1);
+}
+
+function buildRecovery() {
+  const grid = document.getElementById('recovery-grid');
+  grid.innerHTML = '';
+  const today = new Date();
+  for (let i = 0; i < 28; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    const key = d.toISOString().split('T')[0];
+    const label = d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+    const row = recoveryData[key] || {};
+    if (i > 0 && i % 7 === 0) {
+      const sep = document.createElement('div');
+      sep.className = 'week-sep';
+      sep.textContent = 'Week ' + (Math.floor(i/7) + 1);
+      grid.appendChild(sep);
+    }
+    const div = document.createElement('div');
+    div.className = 'recovery-row';
+    const wt = calcWater(row.weight);
+    div.innerHTML = `
+      <div class="date-label">${label}</div>
+      <input class="recovery-input" type="number" placeholder="—" value="${row.weight||''}" onchange="recoveryData['${key}'] = recoveryData['${key}']||{}; recoveryData['${key}'].weight=this.value; refreshWater('${key}',this.value)">
+      <input class="recovery-input" type="number" placeholder="—" value="${row.protein||''}" onchange="recoveryData['${key}'] = recoveryData['${key}']||{}; recoveryData['${key}'].protein=this.value">
+      <input class="recovery-input" type="number" min="0" max="5" step="0.5" placeholder="0–5" value="${row.veg||''}" onchange="recoveryData['${key}'] = recoveryData['${key}']||{}; recoveryData['${key}'].veg=this.value">
+      <div class="water-cell">
+        <input class="recovery-input" type="number" step="0.1" placeholder="—" value="${row.water||''}" onchange="recoveryData['${key}'] = recoveryData['${key}']||{}; recoveryData['${key}'].water=this.value">
+        <div class="water-target" id="wt-${key}">${wt ? `Target: ${wt}L` : '<span style="opacity:0.4">Enter weight</span>'}</div>
+      </div>
+      <input class="recovery-input col-hide" type="number" step="0.5" placeholder="—" value="${row.sleep||''}" onchange="recoveryData['${key}'] = recoveryData['${key}']||{}; recoveryData['${key}'].sleep=this.value">
+      <input class="recovery-input col-hide" type="number" placeholder="—" value="${row.calories||''}" onchange="recoveryData['${key}'] = recoveryData['${key}']||{}; recoveryData['${key}'].calories=this.value">`;
+    grid.appendChild(div);
+  }
+}
+
+function refreshWater(key, val) {
+  const el = document.getElementById('wt-' + key);
+  const t = calcWater(val);
+  if (el) el.innerHTML = t ? `Target: ${t}L` : '<span style="opacity:0.4">Enter weight</span>';
+}
+
+// ─── SUPABASE SAVE / LOAD ──────────────────────────────────
+async function upsert(table, data) {
+  try {
+    const { error } = await supabaseClient.from(table).upsert(data, { onConflict: 'user_id' });
+    if (error) console.error('Supabase upsert error:', error);
+    return error;
+  } catch(e) {
+    console.error('Supabase exception:', e);
+    return e;
+  }
+}
+
+async function loadAllData() {
+  if (!currentUser) return;
+  const uid = currentUser.id;
+
+  try {
+    // Load checklist
+    const { data: cl, error: clErr } = await supabaseClient.from('checklists').select('data').eq('user_id', uid).maybeSingle();
+    if (cl?.data) { checklistData = cl.data; buildChecklist(); }
+
+    // Load recovery — coach loads client data, client loads own
+    if (!isCoach) {
+      const { data: rec } = await supabaseClient.from('recovery').select('data').eq('user_id', uid).maybeSingle();
+      if (rec?.data) { recoveryData = rec.data; buildRecovery(); }
+    }
+
+    // Load workout inputs — coach loads client data, client loads own
+    if (!isCoach) {
+      const { data: wo } = await supabaseClient.from('workout_logs').select('data').eq('user_id', uid).maybeSingle();
+      if (wo?.data) {
+        workoutData = wo.data;
+        document.querySelectorAll('[data-key]').forEach(el => {
+          if (workoutData[el.dataset.key]) el.value = workoutData[el.dataset.key];
+        });
+        buildWeek2(); // rebuild with Wk1 hints now available
+        refreshAllThreads();
+      }
+    }
+
+    // Load coach notes (coach only)
+    if (isCoach) {
+      const { data: notes } = await supabaseClient.from('coach_notes').select('*').maybeSingle();
+      if (notes) {
+        if (notes.weekly) document.getElementById('coach-notes-weekly').value = notes.weekly;
+        if (notes.progress) document.getElementById('coach-notes-progress').value = notes.progress;
+        if (notes.adjustments) document.getElementById('coach-notes-adjustments').value = notes.adjustments;
+      }
+      // Load client recovery data
+      const { data: clientRec } = await supabaseClient.from('recovery').select('data, user_id').neq('user_id', uid);
+      if (clientRec?.length) {
+        clientRec.forEach(row => { if (row.data) Object.assign(recoveryData, row.data); });
+        buildRecovery();
+      }
+
+      // Load client workout data and populate all fields
+      const { data: clientData } = await supabaseClient.from('workout_logs').select('data, user_id').neq('user_id', uid);
+      if (clientData?.length) {
+        workoutData = {};
+        clientData.forEach(row => {
+          if (row.data) Object.assign(workoutData, row.data);
+        });
+        document.querySelectorAll('[data-key]').forEach(el => {
+          if (workoutData[el.dataset.key]) el.value = workoutData[el.dataset.key];
+        });
+        buildWeek2(); // rebuild with Wk1 hints
+        refreshAllThreads();
+      }
+      buildReview();
+    }
+  } catch(e) {
+    console.error('loadAllData error:', e);
+  }
+}
+
+async function saveChecklist() {
+  if (currentUser?.id === 'preview-user') { showStatus('checklist-status', null); return; }
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  const err = await upsert('checklists', { user_id: currentUser.id, data: checklistData });
+  btn.textContent = 'Save Progress';
+  btn.disabled = false;
+  showStatus('checklist-status', err);
+}
+
+async function saveRecovery() {
+  if (currentUser?.id === 'preview-user') { showStatus('recovery-status', null); return; }
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  const err = await upsert('recovery', { user_id: currentUser.id, data: recoveryData });
+  btn.textContent = 'Save Log';
+  btn.disabled = false;
+  showStatus('recovery-status', err);
+}
+
+async function saveWorkout(section) {
+  if (currentUser?.id === 'preview-user') { showStatus(section + '-status', null); return; }
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  const err = await upsert('workout_logs', { user_id: currentUser.id, data: workoutData });
+  btn.textContent = section === 'week1' ? 'Save Week 1' : 'Save Workout Log';
+  btn.disabled = false;
+  showStatus(section + '-status', err);
+}
+
+async function saveWeek(week) {
+  if (currentUser?.id === 'preview-user') { showStatus(week + '-status', null); return; }
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  const err = await upsert('workout_logs', { user_id: currentUser.id, data: workoutData });
+  btn.textContent = week === 'week1' ? 'Save Week 1' : 'Save Week 2';
+  btn.disabled = false;
+  showStatus(week + '-status', err);
+}
+
+async function saveNotes() {
+  if (currentUser?.id === 'preview-user') { showStatus('notes-status', null); return; }
+  const btn = event.target;
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+  const data = {
+    weekly: document.getElementById('coach-notes-weekly').value,
+    progress: document.getElementById('coach-notes-progress').value,
+    adjustments: document.getElementById('coach-notes-adjustments').value,
+  };
+  const { error } = await supabaseClient.from('coach_notes').upsert({ id: 1, ...data });
+  btn.textContent = 'Save Notes';
+  btn.disabled = false;
+  showStatus('notes-status', error);
+}
+
+function showStatus(id, error) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = 'save-status' + (error ? ' error' : '');
+  el.textContent = error ? '✗ Could not save — please try again' : '✓ Saved!';
+  if (!error) setTimeout(() => el.textContent = '', 4000);
+  // If error, leave it visible so she can see it
+}
+
+// ─── INIT ──────────────────────────────────────────────────
+checkSession();
+</script>
+</body>
+</html>
