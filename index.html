@@ -247,10 +247,11 @@
       <button class="tab-btn" onclick="switchTab('recovery',this)">Recovery Tracker</button>
       <button class="tab-btn" onclick="switchTab('notes',this)">Coaching Notes</button>
       <button class="tab-btn" onclick="switchTab('block1',this)">📦 Block 1</button>
-      <button class="tab-btn week-tab" onclick="switchTab('b2w1',this)">📅 B2 Week 1</button>
-      <button class="tab-btn week-tab" onclick="switchTab('b2w2',this)">📅 B2 Week 2</button>
-      <button class="tab-btn week-tab" onclick="switchTab('b2w3',this)">📅 B2 Week 3</button>
-      <button class="tab-btn week-tab" onclick="switchTab('b2w4',this)">📅 B2 Week 4</button>
+      <button class="tab-btn" onclick="switchTab('block2',this)">📦 Block 2</button>
+      <button class="tab-btn week-tab" onclick="switchTab('b3w1',this)">📅 B3 Week 1</button>
+      <button class="tab-btn week-tab" onclick="switchTab('b3w2',this)">📅 B3 Week 2</button>
+      <button class="tab-btn week-tab" onclick="switchTab('b3w3',this)">📅 B3 Week 3</button>
+      <button class="tab-btn week-tab" onclick="switchTab('b3w4',this)">📅 B3 Week 4</button>
       <button class="tab-btn" onclick="switchTab('guide',this)">Training Terms</button>
       <button class="tab-btn coach-only-section" onclick="switchTab('review',this)">🔍 Review</button>
     </div>
@@ -274,8 +275,8 @@
 
     <!-- WORKOUT -->
     <div class="tab-content" id="tab-workout">
-      <p class="section-title">Main Program — Block 1</p>
-      <p class="section-subtitle">Full Body · Bootcamp Style · Supersets · 15–20 Reps · ~45 min</p>
+      <p class="section-title">Main Program — Block 3</p>
+      <p class="section-subtitle">Upper / Lower Split · Supersets · 12–15 Reps · ~45 min</p>
       <div class="autosave-bar"><div class="autosave-dot" id="workout-save-dot"></div><span id="workout-save-text"></span></div>
       <div class="timer-toggle-row" onclick="toggleTimer()">
         <div class="toggle-track" id="timer-track"><div class="toggle-knob"></div></div>
@@ -324,11 +325,11 @@
     <!-- COACHING NOTES -->
     <div class="tab-content" id="tab-notes">
       <p class="section-title">Coaching Notes</p>
-      <p class="section-subtitle">Client overview &amp; coach workspace — Block 1</p>
+      <p class="section-subtitle">Client overview &amp; coach workspace — Block 3</p>
       <div class="stats-grid">
         <div class="stat-card"><div class="val">162</div><div class="lbl">Current Weight</div></div>
         <div class="stat-card"><div class="val">140–145</div><div class="lbl">Goal Weight</div></div>
-        <div class="stat-card"><div class="val">Block 1</div><div class="lbl">Current Phase</div></div>
+        <div class="stat-card"><div class="val">Block 3</div><div class="lbl">Current Phase</div></div>
         <div class="stat-card"><div class="val">4 wks</div><div class="lbl">Block Length</div></div>
         <div class="stat-card"><div class="val">100g</div><div class="lbl">Protein Goal</div></div>
         <div class="stat-card"><div class="val">4–5k</div><div class="lbl">Steps Goal</div></div>
@@ -388,63 +389,89 @@
       </div>
     </div>
 
-    <!-- BLOCK 2 WEEK 1 -->
-    <div class="tab-content" id="tab-b2w1">
-      <p class="section-title">📅 B2 Week 1</p>
-      <p class="section-subtitle">Block 2 · 3 Sets · 12 Reps · New block, fresh start!</p>
-      <div class="autosave-bar"><div class="autosave-dot" id="b2w1-save-dot"></div><span id="b2w1-save-text"></span></div>
+    <!-- BLOCK 2 ARCHIVE -->
+    <div class="tab-content" id="tab-block2">
+      <p class="section-title">📦 Block 2 — Archive</p>
+      <p class="section-subtitle">4 weeks · 3×12 → 3×15 → 4×12 → 4×15 · Completed</p>
+      <div class="autosave-bar"><div class="autosave-dot" id="block2-save-dot"></div><span id="block2-save-text"></span></div>
       <div class="coach-banner green">
-        <strong>💬 Coach — Block 2, Week 1:</strong> Welcome to Block 2, Samah! New exercises, more core work throughout. Start light this week — 12 reps means we're building strength, not just endurance. Focus on the new movements, nail the form, and log everything. You've got this! 💪
+        <strong>Block 2 Complete!</strong> Total-body with extra core — done and dusted, Samah. 🏆 Every weight you logged is preserved here, and the tables stay editable so you can still backfill anything you missed.
       </div>
-      <div id="b2w1-content"></div>
-      <div class="save-row">
-        <button class="save-btn" onclick="saveWeek('b2w1')">Save Week 1</button>
-        <span class="save-status" id="b2w1-status"></span>
+      <div class="notes-card" style="margin-bottom:12px;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 1 — 3 sets · 12 reps</h3>
+        <div id="b2w1-archive"></div>
+      </div>
+      <div class="notes-card" style="margin-bottom:12px;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 2 — 3 sets · 15 reps</h3>
+        <div id="b2w2-archive"></div>
+      </div>
+      <div class="notes-card" style="margin-bottom:12px;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 3 — 4 sets · 12 reps</h3>
+        <div id="b2w3-archive"></div>
+      </div>
+      <div class="notes-card" style="margin-bottom:12px;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 4 — 4 sets · 15 reps</h3>
+        <div id="b2w4-archive"></div>
       </div>
     </div>
 
-    <!-- BLOCK 2 WEEK 2 -->
-    <div class="tab-content" id="tab-b2w2">
-      <p class="section-title">📅 B2 Week 2</p>
-      <p class="section-subtitle">Block 2 · 3 Sets · 15 Reps · Reps climbing!</p>
-      <div class="autosave-bar"><div class="autosave-dot" id="b2w2-save-dot"></div><span id="b2w2-save-text"></span></div>
+    <!-- BLOCK 3 WEEK 1 -->
+    <div class="tab-content" id="tab-b3w1">
+      <p class="section-title">📅 B3 Week 1</p>
+      <p class="section-subtitle">Block 3 · 3 Sets · 12 Reps · New Upper/Lower split!</p>
+      <div class="autosave-bar"><div class="autosave-dot" id="b3w1-save-dot"></div><span id="b3w1-save-text"></span></div>
       <div class="coach-banner green">
-        <strong>💬 Coach — Block 2, Week 2:</strong> Reps up to 15 this week! Same weights as Week 1 to start — only go heavier if 12 felt too easy last week. You should be feeling more comfortable with the new exercises now. Keep rest tight between supersets. 🔥
+        <strong>💬 Coach — Block 3, Week 1:</strong> Welcome to Block 3, Samah! New <strong>Upper/Lower split</strong> — two lower days, two upper days, and a fat-loss focus. Biggest change: your B-stance hip thrust is progressing to a <strong>single-leg hip thrust</strong> on Workout A. Go <strong>slow and controlled</strong> — keep your hips square, drive through the heel, and drop back to B-stance the moment you feel any wobble. Stability first, load second. Everything stays unilateral for your body. Start light at 12 reps and log it all! 💪
       </div>
-      <div id="b2w2-content"></div>
+      <div id="b3w1-content"></div>
       <div class="save-row">
-        <button class="save-btn" onclick="saveWeek('b2w2')">Save Week 2</button>
-        <span class="save-status" id="b2w2-status"></span>
+        <button class="save-btn" onclick="saveWeek('b3w1')">Save Week 1</button>
+        <span class="save-status" id="b3w1-status"></span>
       </div>
     </div>
 
-    <!-- BLOCK 2 WEEK 3 -->
-    <div class="tab-content" id="tab-b2w3">
-      <p class="section-title">📅 B2 Week 3</p>
-      <p class="section-subtitle">Block 2 · 4 Sets · 12 Reps · Sets going up!</p>
-      <div class="autosave-bar"><div class="autosave-dot" id="b2w3-save-dot"></div><span id="b2w3-save-text"></span></div>
+    <!-- BLOCK 3 WEEK 2 -->
+    <div class="tab-content" id="tab-b3w2">
+      <p class="section-title">📅 B3 Week 2</p>
+      <p class="section-subtitle">Block 3 · 3 Sets · 15 Reps · Reps climbing!</p>
+      <div class="autosave-bar"><div class="autosave-dot" id="b3w2-save-dot"></div><span id="b3w2-save-text"></span></div>
       <div class="coach-banner green">
-        <strong>💬 Coach — Block 2, Week 3:</strong> One more set added this week — 4 sets of 12. Drop back to 12 reps so the extra set doesn't destroy you! Keep the same weights as Week 2 or go slightly heavier. You're building real strength now. 💪
+        <strong>💬 Coach — Block 3, Week 2:</strong> Reps up to 15 this week! Same weights as Week 1 to start — only go heavier if 12 felt too easy. The single-leg hip thrust should be feeling more stable now; keep prioritising those square hips. Keep rest tight between supersets. 🔥
       </div>
-      <div id="b2w3-content"></div>
+      <div id="b3w2-content"></div>
       <div class="save-row">
-        <button class="save-btn" onclick="saveWeek('b2w3')">Save Week 3</button>
-        <span class="save-status" id="b2w3-status"></span>
+        <button class="save-btn" onclick="saveWeek('b3w2')">Save Week 2</button>
+        <span class="save-status" id="b3w2-status"></span>
       </div>
     </div>
 
-    <!-- BLOCK 2 WEEK 4 -->
-    <div class="tab-content" id="tab-b2w4">
-      <p class="section-title">📅 B2 Week 4</p>
-      <p class="section-subtitle">Block 2 · 4 Sets · 15 Reps · Final week — finish strong!</p>
-      <div class="autosave-bar"><div class="autosave-dot" id="b2w4-save-dot"></div><span id="b2w4-save-text"></span></div>
+    <!-- BLOCK 3 WEEK 3 -->
+    <div class="tab-content" id="tab-b3w3">
+      <p class="section-title">📅 B3 Week 3</p>
+      <p class="section-subtitle">Block 3 · 4 Sets · 12 Reps · Sets going up!</p>
+      <div class="autosave-bar"><div class="autosave-dot" id="b3w3-save-dot"></div><span id="b3w3-save-text"></span></div>
       <div class="coach-banner green">
-        <strong>💬 Coach — Block 2, Week 4:</strong> Final week of Block 2! 🏆 4 sets of 15 — this is the hardest week of the block. Keep the same weights, trust the process, and log every single set. Your body has changed significantly since Week 1 of Block 1. Let's finish strong and plan Block 3! 🔥
+        <strong>💬 Coach — Block 3, Week 3:</strong> One more set added — 4 sets of 12. Drop back to 12 reps so the extra volume doesn't destroy you! Keep the same weights as Week 2 or go slightly heavier where it felt easy. You're building real strength now. 💪
       </div>
-      <div id="b2w4-content"></div>
+      <div id="b3w3-content"></div>
       <div class="save-row">
-        <button class="save-btn" onclick="saveWeek('b2w4')">Save Week 4</button>
-        <span class="save-status" id="b2w4-status"></span>
+        <button class="save-btn" onclick="saveWeek('b3w3')">Save Week 3</button>
+        <span class="save-status" id="b3w3-status"></span>
+      </div>
+    </div>
+
+    <!-- BLOCK 3 WEEK 4 -->
+    <div class="tab-content" id="tab-b3w4">
+      <p class="section-title">📅 B3 Week 4</p>
+      <p class="section-subtitle">Block 3 · 4 Sets · 15 Reps · Final week — finish strong!</p>
+      <div class="autosave-bar"><div class="autosave-dot" id="b3w4-save-dot"></div><span id="b3w4-save-text"></span></div>
+      <div class="coach-banner green">
+        <strong>💬 Coach — Block 3, Week 4:</strong> Final week of Block 3! 🏆 4 sets of 15 — the hardest week of the block. Keep the same weights, trust the process, and log every single set. Look how far you've come since Block 1. Let's finish strong! 🔥
+      </div>
+      <div id="b3w4-content"></div>
+      <div class="save-row">
+        <button class="save-btn" onclick="saveWeek('b3w4')">Save Week 4</button>
+        <span class="save-status" id="b3w4-status"></span>
       </div>
     </div>
 
@@ -499,6 +526,26 @@
       <div class="notes-card">
         <h3><span class="dot"></span> Block 2 — Week 4</h3>
         <div id="review-b2w4"></div>
+      </div>
+
+      <div class="notes-card" style="border-top:2px solid var(--sage);margin-top:20px;">
+        <h3><span class="dot"></span> Block 3 — Week 1</h3>
+        <div id="review-b3w1"></div>
+      </div>
+
+      <div class="notes-card">
+        <h3><span class="dot"></span> Block 3 — Week 2</h3>
+        <div id="review-b3w2"></div>
+      </div>
+
+      <div class="notes-card">
+        <h3><span class="dot"></span> Block 3 — Week 3</h3>
+        <div id="review-b3w3"></div>
+      </div>
+
+      <div class="notes-card">
+        <h3><span class="dot"></span> Block 3 — Week 4</h3>
+        <div id="review-b3w4"></div>
       </div>
 
       <div class="notes-card">
@@ -708,7 +755,8 @@ function initApp(user) {
   buildLowImpactTab();
   buildRecovery();
   buildBlock1Archive();
-  buildB2W1(); buildB2W2(); buildB2W3(); buildB2W4();
+  buildBlock2Archive();
+  buildB3W1(); buildB3W2(); buildB3W3(); buildB3W4();
   if (isCoach) buildReview();
   loadAllData();
 }
@@ -746,8 +794,8 @@ const block1Workouts = {
   ]}
 };
 
-// ─── BLOCK 2 EXERCISES ────────────────────────────────────────
-const workouts = {
+// ─── BLOCK 2 EXERCISES (archived — data preserved in Supabase under b2w1/b2w2/b2w3/b2w4 keys) ───
+const block2Workouts = {
   A: {
     title: 'Workout A — Lower + Core',
     exercises: [
@@ -798,6 +846,62 @@ const workouts = {
       { id:'D1', name:'Ab wheel / stability ball rollout', tag:'superset core', label:'Core', reps:'10', sets:'3', rest:'15s', note:'From knees — roll out as far as you can control, pull back with core. Don\'t let hips drop.', link:'https://www.youtube.com/results?search_query=stability+ball+rollout+knees+core+beginners' },
       { id:'D2', name:'DB goblet curtsy lunge', tag:'superset', reps:'10 each', sets:'3', rest:'1m', note:'Slow cross behind — keep hips square and chest tall.' },
       { id:'E',  name:'KB/DB push press + farmer\'s carry', tag:'core', label:'HR Finisher', reps:'10 press + 20m carry', sets:'2', rest:'1m 30s', note:'Press overhead for 10 reps then carry for 20m — stay tall, core braced throughout.' },
+    ]
+  }
+};
+
+// ─── BLOCK 3 EXERCISES — Upper/Lower Split (fat loss) ─────────────────
+const workouts = {
+  A: {
+    title: 'Workout A — Lower (Quad)',
+    exercises: [
+      { id:'A',  name:'90/90 hip switch', tag:'warmup', reps:'5 each side', sets:'1', rest:'30s', note:'Slow and intentional — open the hips before loading. Move smoothly between sides.', link:'https://www.youtube.com/results?search_query=90+90+hip+switch+mobility' },
+      { id:'B1', name:'Heel elevated goblet squat', tag:'superset', reps:'12', sets:'3', rest:'15s', note:'Heels on plates, full depth, slow 3s eccentric. Keep the chest tall.' },
+      { id:'B2', name:'Single-leg hip thrust', tag:'superset stability', reps:'12 each', sets:'3', rest:'1m', note:'PROGRESSION from B-stance — one foot planted, working leg only. Go SLOW: drive through the heel, keep hips square and level. Drop back to B-stance the moment you feel any wobble.', link:'https://www.youtube.com/results?search_query=single+leg+hip+thrust+how+to' },
+      { id:'C1', name:'DB Bulgarian split squat', tag:'superset stability', reps:'10 each', sets:'3', rest:'15s', note:'Rear foot on the bench — front knee tracks over mid-foot. Control the descent, stay tall.', link:'https://www.youtube.com/results?search_query=bulgarian+split+squat+dumbbell+how+to' },
+      { id:'C2', name:'Leg extension machine', tag:'superset', reps:'12', sets:'3', rest:'1m', note:'Squeeze the quad at the top and hold 2s. Slow on the way down — no swinging the weight.' },
+      { id:'D1', name:'Walking lunges — DB', tag:'superset stability', reps:'16 total', sets:'3', rest:'15s', note:'Control the descent, drive through the front heel. Note any difference between sides.' },
+      { id:'D2', name:'Abduction machine', tag:'superset', reps:'12', sets:'3', rest:'1m', note:'Controlled — don\'t let the stack slam back. Slow eccentric, squeeze at the end.' },
+      { id:'E',  name:'Rowing machine sprint', tag:'core', label:'HR Finisher', reps:'250m sprint', sets:'2', rest:'1m 30s', note:'Full effort — legs drive first, then pull. Keep your chest up.' },
+    ]
+  },
+  B: {
+    title: 'Workout B — Upper (Push)',
+    exercises: [
+      { id:'A',  name:'Banded pull-apart', tag:'warmup', reps:'15', sets:'1', rest:'30s', note:'Band at shoulder height, pull apart to a T — squeeze the shoulder blades. Light band only.' },
+      { id:'B1', name:'Seated DB shoulder press', tag:'superset', reps:'12', sets:'3', rest:'15s', note:'Back supported, core braced — press without arching. Control the lower every rep.' },
+      { id:'B2', name:'Landmine press', tag:'superset stability', reps:'12 each', sets:'3', rest:'1m', note:'Half-kneeling or standing, single-arm — press at a slight angle. Core resists rotation.', link:'https://www.youtube.com/results?search_query=landmine+press+how+to' },
+      { id:'C1', name:'Incline DB chest press', tag:'superset', reps:'12', sets:'3', rest:'15s', note:'Bench at ~30°, lower with control to the stretch — drive up and slightly in.' },
+      { id:'C2', name:'Cable face pull', tag:'superset', reps:'12', sets:'3', rest:'1m', note:'Rope at face height, pull to the forehead — elbows high. Slow and controlled. Great for shoulder health.', link:'https://www.youtube.com/results?search_query=cable+face+pull+technique' },
+      { id:'D1', name:'Single-arm DB lateral raise', tag:'superset stability', reps:'12 each', sets:'3', rest:'15s', note:'Lead with the elbow, hold 1s at the top. One arm at a time — no swinging.' },
+      { id:'D2', name:'Tricep rope pushdown', tag:'superset', reps:'12', sets:'3', rest:'1m', note:'Elbows pinned to your sides — full lockout at the bottom, slow return.' },
+      { id:'E',  name:'Battle ropes — alternating waves', tag:'core', label:'HR Finisher', reps:'30s on / 20s off', sets:'3', rest:'—', note:'Drive from the core — not just the arms. Stay in an athletic stance.' },
+    ]
+  },
+  C: {
+    title: 'Workout C — Lower (Ham/Glute)',
+    exercises: [
+      { id:'A',  name:'Dead bug with reach', tag:'warmup', reps:'8 each side', sets:'1', rest:'30s', note:'Lower back flat, reach opposite arm and leg — pause at full extension. Core on before everything.' },
+      { id:'B1', name:'DB Romanian deadlift', tag:'superset', reps:'12', sets:'3', rest:'15s', note:'Hinge at the hip, soft knees, feel the hamstring stretch. DBs stay close to the legs.' },
+      { id:'B2', name:'Cable pull-through', tag:'superset', reps:'12', sets:'3', rest:'1m', note:'Hinge back, drive through the glutes to stand — squeeze at the top. Core braced.', link:'https://www.youtube.com/results?search_query=cable+pull+through+glutes' },
+      { id:'C1', name:'DB sumo deadlift', tag:'superset', reps:'12', sets:'3', rest:'15s', note:'Wide stance, toes out — push the floor away. Flat back, chest proud.' },
+      { id:'C2', name:'Seated leg curl machine', tag:'superset', reps:'12', sets:'3', rest:'1m', note:'3s eccentric on the way back — control is everything here.' },
+      { id:'D1', name:'Bilateral hip thrust', tag:'superset', reps:'12', sets:'3', rest:'15s', note:'Both legs — upper back on the bench, chin tucked. Drive through the heels, full glute squeeze at the top.' },
+      { id:'D2', name:'Adduction machine', tag:'superset', reps:'12', sets:'3', rest:'1m', note:'Controlled squeeze in, slow on the way out. No bouncing at the end range.' },
+      { id:'E',  name:'Box step-ups — alternating', tag:'core', label:'HR Finisher', reps:'20 total', sets:'2', rest:'1m', note:'Drive through the heel — stay tall. Speed up as you get comfortable.' },
+    ]
+  },
+  D: {
+    title: 'Workout D — Upper (Pull)',
+    exercises: [
+      { id:'A',  name:'Bird dog', tag:'warmup', reps:'10 each side', sets:'1', rest:'30s', note:'Slow, hips level — pause at full extension. No rotation through the trunk.' },
+      { id:'B1', name:'Wide grip lat pulldown', tag:'superset', reps:'12', sets:'3', rest:'15s', note:'Lead with the elbows, slight lean back — full stretch at the top. Slow eccentric.' },
+      { id:'B2', name:'Single-arm DB row', tag:'superset stability', reps:'12 each', sets:'3', rest:'1m', note:'Brace the core first, elbow drives back — full range of motion. One arm at a time for balance.' },
+      { id:'C1', name:'Seated cable row — neutral grip', tag:'superset', reps:'12', sets:'3', rest:'15s', note:'Full retraction — squeeze the shoulder blades at the end. Slow back.' },
+      { id:'C2', name:'Chest-supported row', tag:'superset', reps:'12', sets:'3', rest:'1m', note:'Chest on the pad — no momentum. Pull to the lower ribs, squeeze, control the return.', link:'https://www.youtube.com/results?search_query=chest+supported+row+machine' },
+      { id:'D1', name:'DB bicep curl', tag:'superset', reps:'12', sets:'3', rest:'15s', note:'Elbows pinned, no swing — squeeze at the top, slow on the way down.' },
+      { id:'D2', name:'Banded pull-apart', tag:'superset', reps:'15', sets:'3', rest:'1m', note:'Pull apart to a T — squeeze the shoulder blades. Keeps the rear delts and posture switched on.' },
+      { id:'E',  name:'KB/DB push press + farmer\'s carry', tag:'core', label:'HR Finisher', reps:'10 press + 20m carry', sets:'2', rest:'1m 30s', note:'Press overhead for 10 reps then carry for 20m — stay tall, core braced throughout. (No sled — the carry covers it.)' },
     ]
   }
 };
@@ -1049,41 +1153,63 @@ function buildBlock1Archive() {
   });
 }
 
-// ─── BLOCK 2 WEEK BUILDERS ────────────────────────────────────
-function buildB2W1() {
+// ─── BLOCK 2 ARCHIVE (editable — reads b2w1..b2w4 keys, auto-saves) ─────
+function buildBlock2Archive() {
+  const weeks = [
+    { containerId:'b2w1-archive', weekKey:'b2w1', sets:'3', reps:'12' },
+    { containerId:'b2w2-archive', weekKey:'b2w2', sets:'3', reps:'15' },
+    { containerId:'b2w3-archive', weekKey:'b2w3', sets:'4', reps:'12' },
+    { containerId:'b2w4-archive', weekKey:'b2w4', sets:'4', reps:'15' },
+  ];
+  weeks.forEach(wk => {
+    const container = document.getElementById(wk.containerId);
+    if (!container) return;
+    let html = '';
+    Object.entries(block2Workouts).forEach(([key, workout]) => {
+      html += `<div style="margin-bottom:12px;">
+        <p style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);margin-bottom:6px;">Workout ${key}</p>
+        ${buildWeekTable(workout.exercises, `${wk.weekKey}-${key}`, null, wk.sets, wk.reps)}
+      </div>`;
+    });
+    container.innerHTML = html;
+  });
+}
+
+// ─── BLOCK 3 WEEK BUILDERS ────────────────────────────────────
+function buildB3W1() {
   let html = '';
   Object.entries(workouts).forEach(([key, workout]) => {
     html += `<div class="workout-block"><div class="workout-block-title">Workout ${key} · 3 sets · 12 reps</div>
-      ${buildWeekTable(workout.exercises, `b2w1-${key}`, null, '3', '12')}</div>`;
+      ${buildWeekTable(workout.exercises, `b3w1-${key}`, null, '3', '12')}</div>`;
   });
-  document.getElementById('b2w1-content').innerHTML = html;
+  document.getElementById('b3w1-content').innerHTML = html;
 }
 
-function buildB2W2() {
+function buildB3W2() {
   let html = '';
   Object.entries(workouts).forEach(([key, workout]) => {
     html += `<div class="workout-block"><div class="workout-block-title">Workout ${key} · 3 sets · 15 reps</div>
-      ${buildWeekTable(workout.exercises, `b2w2-${key}`, `b2w1-${key}`, '3', '15')}</div>`;
+      ${buildWeekTable(workout.exercises, `b3w2-${key}`, `b3w1-${key}`, '3', '15')}</div>`;
   });
-  document.getElementById('b2w2-content').innerHTML = html;
+  document.getElementById('b3w2-content').innerHTML = html;
 }
 
-function buildB2W3() {
+function buildB3W3() {
   let html = '';
   Object.entries(workouts).forEach(([key, workout]) => {
     html += `<div class="workout-block"><div class="workout-block-title">Workout ${key} · 4 sets · 12 reps</div>
-      ${buildWeekTable(workout.exercises, `b2w3-${key}`, `b2w2-${key}`, '4', '12')}</div>`;
+      ${buildWeekTable(workout.exercises, `b3w3-${key}`, `b3w2-${key}`, '4', '12')}</div>`;
   });
-  document.getElementById('b2w3-content').innerHTML = html;
+  document.getElementById('b3w3-content').innerHTML = html;
 }
 
-function buildB2W4() {
+function buildB3W4() {
   let html = '';
   Object.entries(workouts).forEach(([key, workout]) => {
     html += `<div class="workout-block"><div class="workout-block-title">Workout ${key} · 4 sets · 15 reps</div>
-      ${buildWeekTable(workout.exercises, `b2w4-${key}`, `b2w3-${key}`, '4', '15')}</div>`;
+      ${buildWeekTable(workout.exercises, `b3w4-${key}`, `b3w3-${key}`, '4', '15')}</div>`;
   });
-  document.getElementById('b2w4-content').innerHTML = html;
+  document.getElementById('b3w4-content').innerHTML = html;
 }
 
 
@@ -1133,11 +1259,17 @@ function buildReview() {
   buildWorkoutReview('review-week3', block1Workouts, 'w3-');
   buildWorkoutReview('review-week4', block1Workouts, 'w4-');
 
-  // Block 2 — new exercises under b2w1/b2w2/b2w3/b2w4 keys
-  buildWorkoutReview('review-b2w1', workouts, 'b2w1-');
-  buildWorkoutReview('review-b2w2', workouts, 'b2w2-');
-  buildWorkoutReview('review-b2w3', workouts, 'b2w3-');
-  buildWorkoutReview('review-b2w4', workouts, 'b2w4-');
+  // Block 2 — archived exercises under b2w1/b2w2/b2w3/b2w4 keys
+  buildWorkoutReview('review-b2w1', block2Workouts, 'b2w1-');
+  buildWorkoutReview('review-b2w2', block2Workouts, 'b2w2-');
+  buildWorkoutReview('review-b2w3', block2Workouts, 'b2w3-');
+  buildWorkoutReview('review-b2w4', block2Workouts, 'b2w4-');
+
+  // Block 3 — Upper/Lower split under b3w1/b3w2/b3w3/b3w4 keys
+  buildWorkoutReview('review-b3w1', workouts, 'b3w1-');
+  buildWorkoutReview('review-b3w2', workouts, 'b3w2-');
+  buildWorkoutReview('review-b3w3', workouts, 'b3w3-');
+  buildWorkoutReview('review-b3w4', workouts, 'b3w4-');
 
   // Low Impact — uses li- prefix
   buildWorkoutReview('review-lowimpact', lowImpactWorkouts, 'li-');
@@ -1186,10 +1318,10 @@ function buildReview() {
 
 // ─── CHECKLIST ─────────────────────────────────────────────
 const checklistItems = [
-  { id:'wa', label:'Workout A', desc:'Full Body Lower · ~45 min + Stairmaster' },
-  { id:'wb', label:'Workout B', desc:'Full Body Upper · ~45 min + Stairmaster' },
-  { id:'wc', label:'Workout C', desc:'Full Body Posterior Chain · ~45 min + Stairmaster' },
-  { id:'wd', label:'Workout D', desc:'Full Body Push/Pull · ~45 min + Stairmaster' },
+  { id:'wa', label:'Workout A', desc:'Lower (Quad) · ~45 min + Stairmaster' },
+  { id:'wb', label:'Workout B', desc:'Upper (Push) · ~45 min + Stairmaster' },
+  { id:'wc', label:'Workout C', desc:'Lower (Ham/Glute) · ~45 min + Stairmaster' },
+  { id:'wd', label:'Workout D', desc:'Upper (Pull) · ~45 min + Stairmaster' },
   { id:'walk1', label:'Walking Pad — Session 1', desc:'Rest day · 30–45 min · 4,000–5,000 steps' },
   { id:'walk2', label:'Walking Pad — Session 2', desc:'Rest day · 30–45 min · 4,000–5,000 steps' },
   { id:'creatine', label:'Creatine — Daily', desc:'Same time every day' },
@@ -1332,7 +1464,7 @@ async function doAutoSave() {
 
 function setAllSaveStatus(status) {
   const msgs = { saving: 'Saving...', saved: 'All saved ✓', error: 'Could not save — check connection' };
-  ['workout','li','block1','b2w1','b2w2','b2w3','b2w4'].forEach(prefix => {
+  ['workout','li','block1','block2','b3w1','b3w2','b3w3','b3w4'].forEach(prefix => {
     const dot = document.getElementById(prefix + '-save-dot');
     const text = document.getElementById(prefix + '-save-text');
     if (!dot || !text) return;
@@ -1474,7 +1606,8 @@ async function loadAllData() {
           if (workoutData[el.dataset.key]) el.value = workoutData[el.dataset.key];
         });
         buildBlock1Archive();
-        buildB2W1(); buildB2W2(); buildB2W3(); buildB2W4();
+        buildBlock2Archive();
+        buildB3W1(); buildB3W2(); buildB3W3(); buildB3W4();
         buildLowImpactTab();
         refreshAllThreads();
       }
@@ -1506,7 +1639,8 @@ async function loadAllData() {
           if (workoutData[el.dataset.key]) el.value = workoutData[el.dataset.key];
         });
         buildBlock1Archive();
-        buildB2W1(); buildB2W2(); buildB2W3(); buildB2W4();
+        buildBlock2Archive();
+        buildB3W1(); buildB3W2(); buildB3W3(); buildB3W4();
         buildLowImpactTab();
         refreshAllThreads();
       }
@@ -1556,7 +1690,7 @@ async function saveWeek(week) {
   btn.disabled = true;
   btn.textContent = 'Saving...';
   const err = await upsert('workout_logs', { user_id: currentUser.id, data: workoutData });
-  btn.textContent = { b2w1:'Save Week 1', b2w2:'Save Week 2', b2w3:'Save Week 3', b2w4:'Save Week 4' }[week] || 'Save';
+  btn.textContent = { b3w1:'Save Week 1', b3w2:'Save Week 2', b3w3:'Save Week 3', b3w4:'Save Week 4' }[week] || 'Save';
   btn.disabled = false;
   showStatus(week + '-status', err);
 }
