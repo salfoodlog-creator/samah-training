@@ -14,6 +14,8 @@
     --sage-dark: #4E7252;
     --blush: #D4937A;
     --blush-light: #F8EDE8;
+    --blush-deep: #B06A4F;
+    --gold: #B8860B;
     --charcoal: #2C2C2C;
     --mid: #6B6B6B;
     --light: #ADADAD;
@@ -202,6 +204,77 @@
     .section-title { font-size: 18px; }
     table { min-width: 480px; }
   }
+
+  /* ─── STRONG-STYLE REDESIGN ─────────────────────────────── */
+  /* progress header per workout */
+  .prog-head { padding: 4px 2px 14px; margin-bottom: 4px; }
+  .prog-title { font-family: 'Playfair Display', serif; font-style: italic; font-size: 18px; color: var(--sage-dark); margin-bottom: 10px; }
+  .prog-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .prog-bar-fill { height: 100%; width: 0%; background: var(--sage); border-radius: 3px; transition: width 0.3s ease; }
+  .prog-sub { font-size: 11px; color: var(--mid); margin-top: 7px; letter-spacing: 0.04em; }
+
+  /* exercise card */
+  .ex { background: var(--white); border-radius: 16px; margin-bottom: 14px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-left: 4px solid var(--border); }
+  .ex.finisher { background: #FFFCF4; }
+  .superset-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light); margin: 6px 2px 6px; }
+  .ex-head { padding: 14px 16px 10px; }
+  .ex-name { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sage-dark); line-height: 1.3; }
+  .ex-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .ex-tags .tag { font-size: 9px; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; margin-left: 0; }
+  .tag.t-warmup { background: #F0FDF4; color: #166534; border: 1px solid #86EFAC; }
+  .tag.t-stability { background: #EEF2FF; color: #4338CA; border: 1px solid #A5B4FC; }
+  .tag.t-finisher { background: #FFF8E7; color: var(--gold); border: 1px solid #E6CF8A; }
+  .tag.t-superset { background: var(--sage-light); color: var(--sage-dark); border: 1px solid var(--sage); }
+
+  /* cue pill */
+  .cue-pill { margin: 0 16px 12px; background: var(--sage-light); color: var(--sage-dark); border-radius: 12px; padding: 8px 12px; font-size: 12px; line-height: 1.45; }
+  .cue-pill .cue-star { font-weight: 700; margin-right: 4px; }
+  .cue-pill a { color: var(--sage-dark); font-weight: 600; text-decoration: underline; white-space: nowrap; }
+
+  /* coach strip (Salwa) */
+  .coach-strip { margin: 0 16px 12px; background: var(--blush-light); border-left: 3px solid var(--blush); border-radius: 10px; padding: 9px 12px; font-size: 12px; line-height: 1.45; color: var(--charcoal); }
+  .coach-strip b { color: var(--blush-deep); }
+
+  /* set table */
+  .sets { padding: 0 10px 6px; }
+  .set-head { display: grid; grid-template-columns: 34px 1fr 1fr 44px; gap: 8px; padding: 4px 10px; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--light); }
+  .set-row { display: grid; grid-template-columns: 34px 1fr 1fr 44px; gap: 8px; align-items: center; padding: 6px 10px; border-radius: 10px; margin-bottom: 3px; }
+  .set-row.done { background: var(--sage-light); }
+  .set-num { font-size: 14px; font-weight: 700; color: var(--sage-dark); text-align: center; }
+  .set-input { border: 1px solid var(--border); border-radius: 8px; padding: 8px 6px; font-size: 15px; font-family: 'DM Sans', sans-serif; font-weight: 600; width: 100%; background: var(--cream); text-align: center; color: var(--charcoal); }
+  .set-input:focus { outline: none; border-color: var(--sage); }
+  .set-input.below { border-style: dashed; border-color: var(--blush); }
+  .set-row.done .set-input { background: var(--white); border-color: var(--sage); }
+  .set-check { width: 30px; height: 30px; border-radius: 9px; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 15px; color: transparent; cursor: pointer; transition: all 0.15s; }
+  .set-check.on { background: var(--sage); border-color: var(--sage); color: white; }
+  .add-set { margin: 5px 10px 4px; text-align: center; font-size: 12px; color: var(--sage-dark); font-weight: 600; padding: 8px; background: var(--row-alt); border-radius: 9px; cursor: pointer; }
+
+  /* best ever */
+  .best-ever { margin: 4px 16px 0; padding: 8px 0 2px; font-size: 11px; color: var(--mid); display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--border); }
+  .best-ever .be-val { font-weight: 600; color: var(--charcoal); }
+  .pr-badge { background: #FBF1D9; color: var(--gold); font-size: 9px; font-weight: 700; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 20px; text-transform: uppercase; }
+
+  /* her note to Salwa */
+  .ex-feel { width: calc(100% - 32px); margin: 10px 16px 14px; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 13px; color: var(--charcoal); background: var(--cream); font-family: 'DM Sans', sans-serif; resize: vertical; min-height: 40px; }
+  .ex-feel:focus { outline: none; border-color: var(--sage); }
+
+  /* archive block cards */
+  .block-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .block-card.active-block { border-color: var(--sage); background: var(--sage-light); }
+  .block-card-head { padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 12px; }
+  .active-block .block-card-head { cursor: default; }
+  .block-card-title { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--charcoal); }
+  .block-card-meta { font-size: 11px; color: var(--mid); margin-top: 3px; letter-spacing: 0.03em; }
+  .block-status { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: white; background: var(--sage); padding: 4px 10px; border-radius: 20px; flex-shrink: 0; }
+  .block-caret { font-size: 16px; color: var(--light); flex-shrink: 0; transition: transform 0.2s; }
+  .block-caret.open { transform: rotate(90deg); }
+  .block-card-body { padding: 0 14px 8px; border-top: 1px solid var(--border); }
+
+  /* thread sender labels */
+  .thread-bubble-wrap { display: flex; flex-direction: column; max-width: 80%; }
+  .thread-name { font-size: 9px; color: var(--light); margin: 0 4px 2px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .thread-msg.coach .thread-name { text-align: right; }
+  .thread-host { display: block; }
 </style>
 </head>
 <body>
@@ -246,8 +319,7 @@
       <button class="tab-btn" onclick="switchTab('lowimpact',this)">Low Impact</button>
       <button class="tab-btn" onclick="switchTab('recovery',this)">Recovery Tracker</button>
       <button class="tab-btn" onclick="switchTab('notes',this)">Coaching Notes</button>
-      <button class="tab-btn" onclick="switchTab('block1',this)">📦 Block 1</button>
-      <button class="tab-btn" onclick="switchTab('block2',this)">📦 Block 2</button>
+      <button class="tab-btn" onclick="switchTab('archive',this)">Archive</button>
       <button class="tab-btn week-tab" onclick="switchTab('b3w1',this)">📅 B3 Week 1</button>
       <button class="tab-btn week-tab" onclick="switchTab('b3w2',this)">📅 B3 Week 2</button>
       <button class="tab-btn week-tab" onclick="switchTab('b3w3',this)">📅 B3 Week 3</button>
@@ -363,55 +435,77 @@
       </div>
     </div>
 
-    <!-- BLOCK 1 ARCHIVE -->
-    <div class="tab-content" id="tab-block1">
-      <p class="section-title">📦 Block 1 — Archive</p>
-      <p class="section-subtitle">4 weeks · 2×15 → 3×15 → 3×18 → 3×20 · Completed</p>
-      <div class="autosave-bar"><div class="autosave-dot" id="block1-save-dot"></div><span id="block1-save-text"></span></div>
-      <div class="coach-banner green">
-        <strong>Block 1 Complete!</strong> Amazing work finishing your first block, Samah. All your logged weights are preserved here — you can still add or update anything you missed. 🏆
-      </div>
-      <div class="notes-card" style="margin-bottom:12px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 1 — 2 sets · 15 reps</h3>
-        <div id="b1w1-archive"></div>
-      </div>
-      <div class="notes-card" style="margin-bottom:12px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 2 — 3 sets · 15 reps</h3>
-        <div id="b1w2-archive"></div>
-      </div>
-      <div class="notes-card" style="margin-bottom:12px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 3 — 3 sets · 18 reps</h3>
-        <div id="b1w3-archive"></div>
-      </div>
-      <div class="notes-card" style="margin-bottom:12px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 4 — 3 sets · 20 reps</h3>
-        <div id="b1w4-archive"></div>
-      </div>
-    </div>
+    <!-- ARCHIVE -->
+    <div class="tab-content" id="tab-archive">
+      <p class="section-title">Archive</p>
+      <p class="section-subtitle">Your training history — tap a past block to view what you logged</p>
 
-    <!-- BLOCK 2 ARCHIVE -->
-    <div class="tab-content" id="tab-block2">
-      <p class="section-title">📦 Block 2 — Archive</p>
-      <p class="section-subtitle">4 weeks · 3×12 → 3×15 → 4×12 → 4×15 · Completed</p>
-      <div class="autosave-bar"><div class="autosave-dot" id="block2-save-dot"></div><span id="block2-save-text"></span></div>
-      <div class="coach-banner green">
-        <strong>Block 2 Complete!</strong> Total-body with extra core — done and dusted, Samah. 🏆 Every weight you logged is preserved here, and the tables stay editable so you can still backfill anything you missed.
+      <div class="block-card active-block">
+        <div class="block-card-head">
+          <div>
+            <div class="block-card-title">Block 3 — Upper / Lower Split</div>
+            <div class="block-card-meta">3×12 → 3×15 → 4×12 → 4×15 · fat loss</div>
+          </div>
+          <span class="block-status">Active</span>
+        </div>
       </div>
-      <div class="notes-card" style="margin-bottom:12px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 1 — 3 sets · 12 reps</h3>
-        <div id="b2w1-archive"></div>
+
+      <div class="block-card">
+        <div class="block-card-head" onclick="toggleArchiveBlock('arch-b2')">
+          <div>
+            <div class="block-card-title">Block 2 — Total Body + Core</div>
+            <div class="block-card-meta">3×12 → 3×15 → 4×12 → 4×15 · completed</div>
+          </div>
+          <span class="block-caret" id="caret-arch-b2">▸</span>
+        </div>
+        <div class="block-card-body" id="arch-b2" style="display:none;">
+          <div class="autosave-bar"><div class="autosave-dot" id="block2-save-dot"></div><span id="block2-save-text"></span></div>
+          <div class="notes-card" style="margin-bottom:12px;">
+            <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 1 — 3 sets · 12 reps</h3>
+            <div id="b2w1-archive"></div>
+          </div>
+          <div class="notes-card" style="margin-bottom:12px;">
+            <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 2 — 3 sets · 15 reps</h3>
+            <div id="b2w2-archive"></div>
+          </div>
+          <div class="notes-card" style="margin-bottom:12px;">
+            <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 3 — 4 sets · 12 reps</h3>
+            <div id="b2w3-archive"></div>
+          </div>
+          <div class="notes-card" style="margin-bottom:12px;">
+            <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 4 — 4 sets · 15 reps</h3>
+            <div id="b2w4-archive"></div>
+          </div>
+        </div>
       </div>
-      <div class="notes-card" style="margin-bottom:12px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 2 — 3 sets · 15 reps</h3>
-        <div id="b2w2-archive"></div>
-      </div>
-      <div class="notes-card" style="margin-bottom:12px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 3 — 4 sets · 12 reps</h3>
-        <div id="b2w3-archive"></div>
-      </div>
-      <div class="notes-card" style="margin-bottom:12px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 4 — 4 sets · 15 reps</h3>
-        <div id="b2w4-archive"></div>
+
+      <div class="block-card">
+        <div class="block-card-head" onclick="toggleArchiveBlock('arch-b1')">
+          <div>
+            <div class="block-card-title">Block 1 — Total Body</div>
+            <div class="block-card-meta">2×15 → 3×15 → 3×18 → 3×20 · completed</div>
+          </div>
+          <span class="block-caret" id="caret-arch-b1">▸</span>
+        </div>
+        <div class="block-card-body" id="arch-b1" style="display:none;">
+          <div class="autosave-bar"><div class="autosave-dot" id="block1-save-dot"></div><span id="block1-save-text"></span></div>
+          <div class="notes-card" style="margin-bottom:12px;">
+            <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 1 — 2 sets · 15 reps</h3>
+            <div id="b1w1-archive"></div>
+          </div>
+          <div class="notes-card" style="margin-bottom:12px;">
+            <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 2 — 3 sets · 15 reps</h3>
+            <div id="b1w2-archive"></div>
+          </div>
+          <div class="notes-card" style="margin-bottom:12px;">
+            <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 3 — 3 sets · 18 reps</h3>
+            <div id="b1w3-archive"></div>
+          </div>
+          <div class="notes-card" style="margin-bottom:12px;">
+            <h3 style="font-family:'Playfair Display',serif;font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:8px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--sage);display:inline-block;"></span> Week 4 — 3 sets · 20 reps</h3>
+            <div id="b1w4-archive"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -906,46 +1000,46 @@ const workouts = {
   }
 };
 
-// ─── BLOCK 2 LOW IMPACT ───────────────────────────────────────
+// ─── BLOCK 3 LOW IMPACT — mirrors Block 3 Upper/Lower, ~40% volume cut (2 sets, no finishers) ───
 const lowImpactWorkouts = {
   A: {
-    title: 'Low Impact A — Lower + Core',
+    title: 'Low Impact A — Lower (Quad)',
     exercises: [
-      { id:'A',  name:'Dead bug with reach', tag:'warmup', reps:'6 each side', sets:'1', rest:'30s', note:'Lower back flat — slow and controlled. Lighter range of motion if needed.' },
-      { id:'B1', name:'Heel elevated goblet squat', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Full depth, slow eccentric. Reduce weight this week.' },
-      { id:'B2', name:'DB Romanian deadlift', tag:'superset', reps:'10', sets:'2', rest:'1m', note:'Hinge at hip — lighter than usual, focus on feel.' },
-      { id:'C1', name:'Single-arm DB bent over row', tag:'superset', reps:'10 each', sets:'2', rest:'15s', note:'Full range, reduce weight if needed.' },
-      { id:'C2', name:'Pallof press — isometric hold', tag:'superset core', label:'Core', reps:'8 each side + 3s hold', sets:'2', rest:'1m', note:'Press out and hold 3s — gentle core engagement, no straining.' },
+      { id:'A',  name:'90/90 hip switch', tag:'warmup', reps:'5 each side', sets:'1', rest:'30s', note:'Slow and intentional — open the hips. Gentle range this week.' },
+      { id:'B1', name:'Heel elevated goblet squat', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Full depth, slow eccentric. Reduce the weight this week.' },
+      { id:'B2', name:'Single-leg hip thrust', tag:'superset stability', reps:'10 each', sets:'2', rest:'1m', note:'Bodyweight or very light — stability over load. Drop to B-stance if you feel any wobble.' },
+      { id:'C1', name:'DB Bulgarian split squat', tag:'superset stability', reps:'8 each', sets:'2', rest:'15s', note:'Rear foot on bench — control is the goal. Lighter or bodyweight.' },
+      { id:'C2', name:'Leg extension machine', tag:'superset', reps:'10', sets:'2', rest:'1m', note:'Squeeze at the top, slow down. Gentle load.' },
     ]
   },
   B: {
-    title: 'Low Impact B — Upper + Core',
+    title: 'Low Impact B — Upper (Push)',
     exercises: [
-      { id:'A',  name:'Banded pull-apart', tag:'warmup', reps:'12', sets:'1', rest:'30s', note:'Light band — gentle warmup for shoulders.' },
-      { id:'B1', name:'DB shoulder press — both arms, seated', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Both arms seated — lighter weight, controlled movement.' },
-      { id:'B2', name:'Cable face pull', tag:'superset', reps:'10', sets:'2', rest:'1m', note:'Slow and controlled — focus on shoulder blade squeeze.' },
-      { id:'C1', name:'DB hip thrust — both legs', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Drive through heels — lighter weight, squeeze at top.' },
-      { id:'C2', name:'KB/DB swing — light', tag:'superset', reps:'10', sets:'2', rest:'1m', note:'Lighter KB — focus on the hinge pattern and core brace.' },
+      { id:'A',  name:'Banded pull-apart', tag:'warmup', reps:'12', sets:'1', rest:'30s', note:'Light band — gentle warmup for the shoulders.' },
+      { id:'B1', name:'Seated DB shoulder press', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Back supported — lighter weight, controlled movement.' },
+      { id:'B2', name:'Incline DB chest press', tag:'superset', reps:'10', sets:'2', rest:'1m', note:'Slow lower to the stretch — reduce weight this week.' },
+      { id:'C1', name:'Cable face pull', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Slow and controlled — focus on the shoulder blade squeeze.' },
+      { id:'C2', name:'Single-arm DB lateral raise', tag:'superset stability', reps:'10 each', sets:'2', rest:'1m', note:'Lead with the elbow — no swinging. Light.' },
     ]
   },
   C: {
-    title: 'Low Impact C — Posterior Chain + Core',
+    title: 'Low Impact C — Lower (Ham/Glute)',
     exercises: [
-      { id:'A',  name:'90/90 hip switch + breathing', tag:'warmup', reps:'5 each side', sets:'1', rest:'30s', note:'Slow and intentional.' },
-      { id:'B1', name:'Seated leg curl machine', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Slow eccentric — light weight this week.' },
-      { id:'B2', name:'DB step-back lunge', tag:'superset', reps:'10 each', sets:'2', rest:'1m', note:'No weight if needed — control is the goal.' },
-      { id:'C1', name:'B-stance hip thrust — machine (or DB)', tag:'superset stability', reps:'10 each side', sets:'2', rest:'15s', note:'Keep it light — stability over load this week.' },
-      { id:'C2', name:'Abduction machine', tag:'superset', reps:'10', sets:'2', rest:'1m', note:'Controlled — gentle load.' },
+      { id:'A',  name:'Dead bug with reach', tag:'warmup', reps:'6 each side', sets:'1', rest:'30s', note:'Lower back flat — slow and controlled.' },
+      { id:'B1', name:'DB Romanian deadlift', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Hinge at the hip — lighter than usual, focus on feel.' },
+      { id:'B2', name:'Seated leg curl machine', tag:'superset', reps:'10', sets:'2', rest:'1m', note:'Slow eccentric — light weight this week.' },
+      { id:'C1', name:'Bilateral hip thrust', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Both legs — drive through the heels, lighter load, squeeze at the top.' },
+      { id:'C2', name:'Adduction machine', tag:'superset', reps:'10', sets:'2', rest:'1m', note:'Controlled squeeze — gentle load.' },
     ]
   },
   D: {
-    title: 'Low Impact D — Push/Pull + Core',
+    title: 'Low Impact D — Upper (Pull)',
     exercises: [
       { id:'A',  name:'Bird dog', tag:'warmup', reps:'8 each side', sets:'1', rest:'30s', note:'Slow, hips level.' },
-      { id:'B1', name:'Wide grip lat pull-down', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Light weight — full stretch at top.' },
-      { id:'B2', name:'Seated cable row — neutral grip', tag:'superset', reps:'10', sets:'2', rest:'1m', note:'Full retraction — reduce weight this week.' },
-      { id:'C1', name:'DB goblet curtsy lunge', tag:'superset', reps:'8 each', sets:'2', rest:'15s', note:'Slow and controlled — lighter weight.' },
-      { id:'C2', name:'Single-arm DB lateral raise', tag:'superset', reps:'10 each', sets:'2', rest:'1m', note:'Lead with elbow — no swinging.' },
+      { id:'B1', name:'Wide grip lat pulldown', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Light weight — full stretch at the top.' },
+      { id:'B2', name:'Single-arm DB row', tag:'superset stability', reps:'10 each', sets:'2', rest:'1m', note:'Full range — reduce the weight this week. One arm at a time.' },
+      { id:'C1', name:'Seated cable row — neutral grip', tag:'superset', reps:'10', sets:'2', rest:'15s', note:'Full retraction — lighter load.' },
+      { id:'C2', name:'DB bicep curl', tag:'superset', reps:'10', sets:'2', rest:'1m', note:'Elbows pinned, no swing — slow and controlled.' },
     ]
   }
 };
@@ -982,7 +1076,7 @@ function buildExerciseTable(exercises, tableKey, isWeek = false) {
       <td class="note-cell">${ex.note}</td>
       <td><textarea class="cell-input" data-key="${key}-feel" placeholder="Notes..." oninput="cacheInput(this)"></textarea></td>
     </tr>
-    <tr class="thread-row"><td colspan="8">${buildThread(key)}</td></tr>`;
+    <tr class="thread-row"><td colspan="8"><div class="thread-host" data-thread-key="${key}">${buildThread(key)}</div></td></tr>`;
   });
 
   html += '</tbody></table></div>';
@@ -1027,14 +1121,21 @@ function buildReferenceTable(exercises) {
 
 function buildLowImpactTab() {
   let html = '';
-  Object.entries(lowImpactWorkouts).forEach(([key, workout]) => {
+  Object.entries(lowImpactWorkouts).forEach(([letter, workout]) => {
+    const total = workout.exercises.length;
+    const cards = buildWeekCards(workout.exercises, `li-${letter}`, null, '2', '10');
     html += `<div class="workout-block">
-      <div class="workout-block-title blush-title">${workout.title}</div>
-      ${buildLowImpactTable(workout.exercises, `li-${key}`)}
+      <div class="prog-head">
+        <div class="prog-title" style="color:var(--blush);">${workout.title}</div>
+        <div class="prog-bar"><div class="prog-bar-fill" style="background:var(--blush);"></div></div>
+        <div class="prog-sub"><span class="prog-count">0</span> of ${total} exercises done</div>
+      </div>
+      ${cards}
     </div>`;
   });
   html += `<div class="save-row"><button class="save-btn" onclick="saveWorkout('lowimpact')">Save Low Impact Log</button><span class="save-status" id="lowimpact-status"></span></div>`;
   document.getElementById('lowimpact-content').innerHTML = html;
+  refreshAllProgress();
 }
 
 function buildLowImpactTable(exercises, tableKey) {
@@ -1072,7 +1173,7 @@ function buildLowImpactTable(exercises, tableKey) {
       <td><textarea class="cell-input" data-key="${key}-feel" placeholder="Notes..." oninput="cacheInput(this)"></textarea></td>
       ${isCoach ? `<td><textarea class="cell-input coach-only" data-key="${key}-coach" placeholder="Coach..." oninput="cacheInput(this)"></textarea></td>` : ''}
     </tr>
-    <tr class="thread-row"><td colspan="${isCoach ? 10 : 9}">${buildThread(key)}</td></tr>`;
+    <tr class="thread-row"><td colspan="${isCoach ? 10 : 9}"><div class="thread-host" data-thread-key="${key}">${buildThread(key)}</div></td></tr>`;
   });
   html += '</tbody></table></div>';
   return html;
@@ -1117,10 +1218,257 @@ function buildWeekTable(exercises, weekKey, prevWeekKey, sets, reps) {
       <td><textarea class="cell-input" data-key="${key}-feel" placeholder="Notes..." oninput="cacheInput(this)"></textarea></td>
       ${isCoach ? `<td><textarea class="cell-input coach-only" data-key="${key}-coach" placeholder="Coach..." oninput="cacheInput(this)"></textarea></td>` : ''}
     </tr>
-    <tr class="thread-row"><td colspan="${colSpan}">${buildThread(key)}</td></tr>`;
+    <tr class="thread-row"><td colspan="${colSpan}"><div class="thread-host" data-thread-key="${key}">${buildThread(key)}</div></td></tr>`;
   });
   html += '</tbody></table></div>';
   return html;
+}
+
+// ─── BEST-EVER (scans all logged sets for an exercise, by name, across all blocks) ───
+const BLOCK_SOURCES = [
+  { prefixes:['w1','w2','w3','w4'],                 source:() => block1Workouts },
+  { prefixes:['b2w1','b2w2','b2w3','b2w4'],         source:() => block2Workouts },
+  { prefixes:['b3w1','b3w2','b3w3','b3w4'],         source:() => workouts },
+  { prefixes:['li'],                                source:() => lowImpactWorkouts },
+];
+
+// Collect every logged {weight, reps} for an exercise name. Includes legacy single-weight keys.
+function allLoggedForName(name, opts = {}) {
+  const out = [];
+  BLOCK_SOURCES.forEach(src => {
+    Object.entries(src.source()).forEach(([letter, wk]) => {
+      wk.exercises.forEach(ex => {
+        if (ex.name !== name) return;
+        src.prefixes.forEach(p => {
+          const base = `${p}-${letter}-${ex.id}`;
+          if (opts.excludeBase && base === opts.excludeBase) return;
+          // per-set keys
+          for (let n = 1; n <= 8; n++) {
+            const w = parseFloat(workoutData[`${base}-s${n}-weight`]);
+            if (!isNaN(w)) out.push({ weight:w, reps: workoutData[`${base}-s${n}-reps`] || '' });
+          }
+          // legacy single key (migration: never lost)
+          const lw = parseFloat(workoutData[`${base}-weight`]);
+          if (!isNaN(lw)) out.push({ weight:lw, reps:'' });
+        });
+      });
+    });
+  });
+  return out;
+}
+
+function bestEver(name) {
+  const all = allLoggedForName(name);
+  if (!all.length) return null;
+  return all.reduce((b, e) => e.weight > b.weight ? e : b, all[0]);
+}
+
+// Max weight logged in one specific exercise instance (this week's card)
+function maxForBase(base) {
+  let max = null;
+  for (let n = 1; n <= 8; n++) {
+    const w = parseFloat(workoutData[`${base}-s${n}-weight`]);
+    if (!isNaN(w)) max = (max === null) ? w : Math.max(max, w);
+  }
+  const lw = parseFloat(workoutData[`${base}-weight`]);
+  if (!isNaN(lw)) max = (max === null) ? lw : Math.max(max, lw);
+  return max;
+}
+
+// Per-set weight summary for the coach Review (falls back to legacy single weight)
+function reviewWeightSummary(base) {
+  const parts = [];
+  for (let n = 1; n <= 8; n++) {
+    const w = workoutData[`${base}-s${n}-weight`];
+    if (w !== undefined && w !== '') {
+      const r = workoutData[`${base}-s${n}-reps`];
+      parts.push(r ? `${r}×${w}` : `${w}`);
+    }
+  }
+  if (parts.length) return parts.join(' · ');
+  const legacy = workoutData[`${base}-weight`];
+  return (legacy !== undefined && legacy !== '') ? legacy : '—';
+}
+
+// ─── WEEK CARDS (Strong-style per-set logging) ─────────────────
+const SUPERSET_GROUPS = {
+  B: { color:'#7A9E7E', label:'Superset 1' },
+  C: { color:'#C99A6A', label:'Superset 2' },
+  D: { color:'#9B8AA8', label:'Superset 3' },
+};
+
+function buildWeekCards(exercises, weekKey, prevWeekKey, sets, reps) {
+  let html = '';
+  exercises.forEach(ex => {
+    const base = `${weekKey}-${ex.id}`;
+    const prevBase = prevWeekKey ? `${prevWeekKey}-${ex.id}` : null;
+    const isWarmup = ex.id === 'A';
+    const isFinisher = ex.tag === 'finisher' || ex.label === 'HR Finisher';
+    const groupKey = ex.id[0];
+    const group = SUPERSET_GROUPS[groupKey];
+    const stripe = group ? group.color : 'var(--border)';
+
+    // "Superset N" label above the first of each pair
+    if (group && ex.id === groupKey + '1') {
+      html += `<div class="superset-label">${group.label}</div>`;
+    }
+
+    // tags
+    const tagList = (ex.tag ? ex.tag.split(' ') : []).filter(t => t !== 'superset' && t !== 'core');
+    if (isFinisher) tagList.push('finisher');
+    else if (!isWarmup && !group) { /* singles: no superset tag */ }
+    else if (group) tagList.unshift('superset');
+    const tagsHtml = tagList.map(t => {
+      const lbl = t === 'warmup' ? 'Warm-up' : t === 'stability' ? 'Stability' : t === 'finisher' ? 'HR Finisher' : t === 'superset' ? 'Superset' : t;
+      return `<span class="tag t-${t}">${lbl}</span>`;
+    }).join('');
+
+    // cue pill (note + demo link)
+    const demo = ex.link ? ` <a href="${ex.link}" target="_blank">▶ demo</a>` : '';
+    const cue = ex.note ? `<div class="cue-pill"><span class="cue-star">✦</span>${ex.note}${demo}</div>` : '';
+
+    // set rows
+    const rowCount = isWarmup ? 1 : (isFinisher ? parseInt(ex.sets) || 2 : parseInt(sets) || 3);
+    const targetReps = (isWarmup || isFinisher) ? ex.reps : reps;
+    const headThird = isWarmup ? 'Target' : 'Weight';
+    let rowsHtml = '';
+    for (let n = 1; n <= rowCount; n++) {
+      rowsHtml += setRowHtml(base, prevBase, n, targetReps);
+    }
+    const addSetBtn = (isWarmup) ? '' : `<div class="add-set" onclick="addSet('${base}','${escAttr(targetReps)}',${prevBase ? `'${prevBase}'` : 'null'})">+ Add set</div>`;
+
+    // best ever + PR
+    const best = bestEver(ex.name);
+    const curMax = maxForBase(base);
+    const isPR = best && curMax !== null && curMax >= best.weight && curMax > 0;
+    let bestHtml = '';
+    if (best) {
+      const valTxt = best.reps ? `${best.reps} × ${best.weight}` : `${best.weight}`;
+      bestHtml = `<div class="best-ever">Best ever: <span class="be-val">${valTxt}</span>${isPR ? '<span class="pr-badge">★ PR</span>' : ''}</div>`;
+    }
+
+    // her note to Salwa (feel key preserved)
+    const feelVal = workoutData[`${base}-feel`] ? escAttr(workoutData[`${base}-feel`]) : '';
+    const feel = `<textarea class="ex-feel" data-key="${base}-feel" placeholder="Your note to Salwa…" oninput="cacheInput(this)">${workoutData[`${base}-feel`] ? escHtml(workoutData[`${base}-feel`]) : ''}</textarea>`;
+
+    html += `<div class="ex${isFinisher ? ' finisher' : ''}" style="border-left-color:${stripe};">
+      <div class="ex-head">
+        <div class="ex-name">${ex.name}</div>
+        ${tagsHtml ? `<div class="ex-tags">${tagsHtml}</div>` : ''}
+      </div>
+      ${cue}
+      <div class="sets" id="sets-${base}">
+        <div class="set-head"><span>Set</span><span>Reps</span><span>${headThird}</span><span></span></div>
+        ${rowsHtml}
+        ${addSetBtn}
+      </div>
+      ${bestHtml}
+      ${feel}
+      <div class="thread-host" data-thread-key="${base}">${buildThread(base)}</div>
+    </div>`;
+  });
+  return html;
+}
+
+function setRowHtml(base, prevBase, n, targetReps) {
+  // reps: stored, else target prefill
+  const storedReps = workoutData[`${base}-s${n}-reps`];
+  const repsVal = (storedReps !== undefined && storedReps !== '') ? storedReps : targetReps;
+  const targetNum = parseInt(targetReps);
+  const repsNum = parseInt(repsVal);
+  const below = (!isNaN(targetNum) && !isNaN(repsNum) && repsNum < targetNum) ? ' below' : '';
+
+  // weight: stored per-set, else (set 1 only) legacy single-weight migration
+  let weightVal = workoutData[`${base}-s${n}-weight`];
+  if ((weightVal === undefined || weightVal === '') && n === 1) {
+    weightVal = workoutData[`${base}-weight`] || '';
+  }
+  weightVal = weightVal || '';
+
+  // previous session placeholder
+  let prevW = '';
+  if (prevBase) prevW = workoutData[`${prevBase}-s${n}-weight`] || workoutData[`${prevBase}-weight`] || '';
+  const wPlaceholder = prevW ? `${prevW} last` : 'lbs';
+
+  // done state
+  const done = workoutData[`${base}-s${n}-done`] ? ' done' : '';
+  const checkOn = workoutData[`${base}-s${n}-done`] ? ' on' : '';
+
+  return `<div class="set-row${done}" id="row-${base}-s${n}">
+    <div class="set-num">${n}</div>
+    <input class="set-input${below}" data-key="${base}-s${n}-reps" value="${escAttr(repsVal)}" oninput="onRepsInput(this,'${escAttr(targetReps)}')">
+    <input class="set-input" data-key="${base}-s${n}-weight" value="${escAttr(weightVal)}" placeholder="${escAttr(wPlaceholder)}" oninput="cacheInput(this)">
+    <div class="set-check${checkOn}" onclick="toggleSet(this,'${base}',${n})">✓</div>
+  </div>`;
+}
+
+function onRepsInput(el, targetReps) {
+  cacheInput(el);
+  const t = parseInt(targetReps), v = parseInt(el.value);
+  el.classList.toggle('below', !isNaN(t) && !isNaN(v) && v < t);
+}
+
+function toggleSet(el, base, n) {
+  const key = `${base}-s${n}-done`;
+  const on = !workoutData[key];
+  workoutData[key] = on ? '1' : '';
+  el.classList.toggle('on', on);
+  const row = document.getElementById(`row-${base}-s${n}`);
+  if (row) row.classList.toggle('done', on);
+  updateProgressFor(el);
+  scheduleAutoSave();
+}
+
+function addSet(base, targetReps, prevBase) {
+  const container = document.getElementById(`sets-${base}`);
+  if (!container) return;
+  const existing = container.querySelectorAll('.set-row').length;
+  const n = existing + 1;
+  const addBtn = container.querySelector('.add-set');
+  const tmp = document.createElement('div');
+  tmp.innerHTML = setRowHtml(base, prevBase === 'null' ? null : prevBase, n, targetReps).trim();
+  const newRow = tmp.firstChild;
+  if (addBtn) container.insertBefore(newRow, addBtn);
+  else container.appendChild(newRow);
+}
+
+// ─── PROGRESS (per workout block: X of Y exercises done) ───────
+function updateProgress(blockEl) {
+  if (!blockEl) return;
+  const cards = blockEl.querySelectorAll('.ex');
+  let done = 0;
+  cards.forEach(card => {
+    const checks = card.querySelectorAll('.set-check');
+    if (checks.length && [...checks].every(c => c.classList.contains('on'))) done++;
+  });
+  const total = cards.length;
+  const fill = blockEl.querySelector('.prog-bar-fill');
+  const sub = blockEl.querySelector('.prog-count');
+  if (fill) fill.style.width = total ? `${Math.round(done / total * 100)}%` : '0%';
+  if (sub) sub.textContent = done;
+}
+
+function updateProgressFor(el) {
+  const block = el.closest('.workout-block');
+  if (block) updateProgress(block);
+}
+
+function refreshAllProgress() {
+  document.querySelectorAll('.workout-block').forEach(updateProgress);
+}
+
+function escAttr(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ─── ARCHIVE BLOCK CARDS (expand/collapse) ─────────────────────
+function toggleArchiveBlock(id) {
+  const body = document.getElementById(id);
+  const caret = document.getElementById('caret-' + id);
+  if (!body) return;
+  const open = body.style.display === 'none';
+  body.style.display = open ? 'block' : 'none';
+  if (caret) caret.classList.toggle('open', open);
 }
 
 // ─── BLOCK 1 ARCHIVE (editable — auto-saves) ─────────────────
@@ -1175,42 +1523,39 @@ function buildBlock2Archive() {
   });
 }
 
-// ─── BLOCK 3 WEEK BUILDERS ────────────────────────────────────
-function buildB3W1() {
-  let html = '';
-  Object.entries(workouts).forEach(([key, workout]) => {
-    html += `<div class="workout-block"><div class="workout-block-title">Workout ${key} · 3 sets · 12 reps</div>
-      ${buildWeekTable(workout.exercises, `b3w1-${key}`, null, '3', '12')}</div>`;
-  });
-  document.getElementById('b3w1-content').innerHTML = html;
+// ─── BLOCK 3 WEEK BUILDERS (Strong-style cards) ───────────────
+function weekWorkoutBlock(letter, workout, weekKey, prevKey, sets, reps) {
+  const subtitle = (workout.title.split('—')[1] || '').trim();
+  const total = workout.exercises.length;
+  const cards = buildWeekCards(
+    workout.exercises,
+    `${weekKey}-${letter}`,
+    prevKey ? `${prevKey}-${letter}` : null,
+    sets, reps
+  );
+  return `<div class="workout-block">
+    <div class="prog-head">
+      <div class="prog-title">Workout ${letter} — ${subtitle}</div>
+      <div class="prog-bar"><div class="prog-bar-fill"></div></div>
+      <div class="prog-sub"><span class="prog-count">0</span> of ${total} exercises done</div>
+    </div>
+    ${cards}
+  </div>`;
 }
 
-function buildB3W2() {
+function buildWeek(weekKey, prevKey, sets, reps) {
   let html = '';
-  Object.entries(workouts).forEach(([key, workout]) => {
-    html += `<div class="workout-block"><div class="workout-block-title">Workout ${key} · 3 sets · 15 reps</div>
-      ${buildWeekTable(workout.exercises, `b3w2-${key}`, `b3w1-${key}`, '3', '15')}</div>`;
+  Object.entries(workouts).forEach(([letter, workout]) => {
+    html += weekWorkoutBlock(letter, workout, weekKey, prevKey, sets, reps);
   });
-  document.getElementById('b3w2-content').innerHTML = html;
+  document.getElementById(`${weekKey}-content`).innerHTML = html;
+  refreshAllProgress();
 }
 
-function buildB3W3() {
-  let html = '';
-  Object.entries(workouts).forEach(([key, workout]) => {
-    html += `<div class="workout-block"><div class="workout-block-title">Workout ${key} · 4 sets · 12 reps</div>
-      ${buildWeekTable(workout.exercises, `b3w3-${key}`, `b3w2-${key}`, '4', '12')}</div>`;
-  });
-  document.getElementById('b3w3-content').innerHTML = html;
-}
-
-function buildB3W4() {
-  let html = '';
-  Object.entries(workouts).forEach(([key, workout]) => {
-    html += `<div class="workout-block"><div class="workout-block-title">Workout ${key} · 4 sets · 15 reps</div>
-      ${buildWeekTable(workout.exercises, `b3w4-${key}`, `b3w3-${key}`, '4', '15')}</div>`;
-  });
-  document.getElementById('b3w4-content').innerHTML = html;
-}
+function buildB3W1() { buildWeek('b3w1', null,   '3', '12'); }
+function buildB3W2() { buildWeek('b3w2', 'b3w1', '3', '15'); }
+function buildB3W3() { buildWeek('b3w3', 'b3w2', '4', '12'); }
+function buildB3W4() { buildWeek('b3w4', 'b3w3', '4', '15'); }
 
 
 function buildReview() {
@@ -1223,8 +1568,9 @@ function buildReview() {
     let html = '';
     Object.entries(exercises_source).forEach(([wKey, workout]) => {
       const rows = workout.exercises.map(ex => {
-        const weight = workoutData[`${keyPrefix}${wKey}-${ex.id}-weight`] || '—';
-        const feel   = workoutData[`${keyPrefix}${wKey}-${ex.id}-feel`]   || '—';
+        const base = `${keyPrefix}${wKey}-${ex.id}`;
+        const weight = reviewWeightSummary(base);
+        const feel   = workoutData[`${base}-feel`] || '—';
         if (weight === '—' && feel === '—') return '';
         return `<tr>
           <td style="padding:7px 10px;border-bottom:1px solid var(--border);font-size:11px;font-weight:600;color:var(--sage-dark);">${ex.id}</td>
@@ -1373,10 +1719,11 @@ function buildThread(key) {
       const avatarClass = isCoachMsg ? 'coach-av' : 'samah';
       const bubbleClass = isCoachMsg ? 'coach-b' : 'samah';
       const initial = isCoachMsg ? 'S' : 'Sa';
+      const name = isCoachMsg ? 'Salwa' : 'Samah';
       const align = isCoachMsg ? 'coach' : '';
       msgsHtml += `<div class="thread-msg ${align}">
         <div class="thread-avatar ${avatarClass}">${initial}</div>
-        <div class="thread-bubble ${bubbleClass}">${escHtml(m.text)}</div>
+        <div class="thread-bubble-wrap"><div class="thread-name">${name}</div><div class="thread-bubble ${bubbleClass}">${escHtml(m.text)}</div></div>
       </div>`;
     });
   }
@@ -1409,23 +1756,17 @@ function sendMessage(key) {
   if (!workoutData[`${key}-thread`]) workoutData[`${key}-thread`] = [];
   workoutData[`${key}-thread`].push({ role, text, ts: Date.now() });
   input.value = '';
-  // Refresh just this thread cell without rebuilding entire table
-  const threadCells = document.querySelectorAll('.thread-row td');
-  threadCells.forEach(cell => {
-    const btn = cell.querySelector(`[onclick="sendMessage('${key}')"]`);
-    if (btn) cell.innerHTML = buildThread(key);
+  // Re-render this exercise's thread host(s) — works in cards and archive tables
+  document.querySelectorAll('.thread-host').forEach(host => {
+    if (host.dataset.threadKey === key) host.innerHTML = buildThread(key);
   });
   scheduleAutoSave();
 }
 
 function refreshAllThreads() {
-  // Re-render every thread cell now that workoutData is populated
-  document.querySelectorAll('.thread-row td').forEach(cell => {
-    // Extract key from the send button or input inside
-    const btn = cell.querySelector('.thread-send');
-    if (!btn) return;
-    const match = btn.getAttribute('onclick')?.match(/sendMessage\('(.+?)'\)/);
-    if (match) cell.innerHTML = buildThread(match[1]);
+  // Re-render every thread host now that workoutData is populated
+  document.querySelectorAll('.thread-host').forEach(host => {
+    if (host.dataset.threadKey) host.innerHTML = buildThread(host.dataset.threadKey);
   });
 }
 
